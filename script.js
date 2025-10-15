@@ -315,61 +315,69 @@ const vigPreviewBtn = document.getElementById('vig-preview');
 const vigClearBtn   = document.getElementById('vig-clear');
 
 
-// Universal modal elements
+// Universal modal elements (should exist at document root)
 const modal = document.getElementById('universal-modal');
 const modalContent = document.getElementById('modal-content');
 const modalClose = document.getElementById('modal-close');
+
+// Single shared modal helpers (global functions used throughout)
+function showModal(html) {
+  if (!modal || !modalContent) return console.warn('Modal elements not found');
+  console.log('showModal called');
+  modalContent.innerHTML = html;
+  modal.style.display = 'flex';
+  // ensure modal occupies space; small timeout to allow CSS/layout
+  setTimeout(() => { try { modal.focus && modal.focus(); } catch (e) {} }, 10);
+}
+function closeModal() {
+  if (!modal || !modalContent) return;
+  modal.style.display = 'none';
+  modalContent.innerHTML = '';
+}
+
+// Attach basic modal listeners now
+modalClose?.addEventListener('click', closeModal);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && modal && modal.style && modal.style.display === 'flex') closeModal();
+});
+
+// Ensure renderTutorial is available globally
+function renderTutorial() {
+  const html = `
+    <h3>📘 Tutorial: Caesar & Vigenère</h3>
+    <section>
+      <h4>Caesar (single shift)</h4>
+      <p><strong>Idea:</strong> Every letter shifts by the same amount (e.g., shift 3).</p>
+      <p><strong>Example:</strong> Shift 3 → A→D, B→E, C→F …; <code>BRING HOT SOUP FOR LUNCH</code> → shift 3 → ciphertext.</p>
+      <p>Try the <em>Brute Force</em> tool to see all 26 shifts and look for real words.</p>
+    </section>
+    <section>
+      <h4>Vigenère (keyword-based)</h4>
+      <p><strong>Idea:</strong> Use a <em>keyword</em>. Each keyword letter selects a Caesar shift, repeating across the message.</p>
+      <p><strong>Keyword → shifts:</strong> LYRICS → L(11), Y(24), R(17), I(8), C(2), S(18)</p>
+      <p><strong>Decrypting:</strong> For each message letter, subtract the keyword’s shift (wrapping the keyword).</p>
+      <p><strong>Example:</strong> Keyword <code>TABBY</code> on ciphertext of
+        <code>HIDE THE TREATS UNDER BED</code> will reveal the plaintext once the correct keyword is entered.</p>
+      <p>Use the <em>Vigenère Helper</em>: enter a keyword → <em>Preview Decrypt</em> of the current puzzle.</p>
+    </section>
+  `;
+  showModal(html);
+}
+
+// Attach modal-triggering listeners after DOM is ready (guarded attachments)
 document.addEventListener('DOMContentLoaded', () => {
-  // Modal helpers
-  function showModal(html) {
-    console.log('showModal called');
-    modalContent.innerHTML = html;
-    modal.style.display = 'flex';
-    setTimeout(() => { modal.focus && modal.focus(); }, 10);
+  if (btnLeaderboardIntro) {
+    btnLeaderboardIntro.addEventListener('click', () => {
+      console.log('Leaderboard button clicked');
+      if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = 'Opening…';
+      renderLB();
+      setTimeout(()=>{ if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = '🏆 Leaderboard'; }, 1200);
+    });
   }
-  function closeModal() {
-    modal.style.display = 'none';
-    modalContent.innerHTML = '';
-  }
-
-  modalClose?.addEventListener('click', closeModal);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.style.display === 'flex') closeModal();
-  });
-
-  function renderTutorial() {
-    const html = `
-      <h3>📘 Tutorial: Caesar & Vigenère</h3>
-      <section>
-        <h4>Caesar (single shift)</h4>
-        <p><strong>Idea:</strong> Every letter shifts by the same amount (e.g., shift 3).</p>
-        <p><strong>Example:</strong> Shift 3 → A→D, B→E, C→F …; <code>BRING HOT SOUP FOR LUNCH</code> → shift 3 → ciphertext.</p>
-        <p>Try the <em>Brute Force</em> tool to see all 26 shifts and look for real words.</p>
-      </section>
-      <section>
-        <h4>Vigenère (keyword-based)</h4>
-        <p><strong>Idea:</strong> Use a <em>keyword</em>. Each keyword letter selects a Caesar shift, repeating across the message.</p>
-        <p><strong>Keyword → shifts:</strong> LYRICS → L(11), Y(24), R(17), I(8), C(2), S(18)</p>
-        <p><strong>Decrypting:</strong> For each message letter, subtract the keyword’s shift (wrapping the keyword).</p>
-        <p><strong>Example:</strong> Keyword <code>TABBY</code> on ciphertext of
-          <code>HIDE THE TREATS UNDER BED</code> will reveal the plaintext once the correct keyword is entered.</p>
-        <p>Use the <em>Vigenère Helper</em>: enter a keyword → <em>Preview Decrypt</em> of the current puzzle.</p>
-      </section>
-    `;
-    showModal(html);
-  }
-
-  // Attach modal event listeners after DOM is ready
-  btnLeaderboardIntro?.addEventListener('click', () => {
-    console.log('Leaderboard button clicked');
-    if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = 'Opening…';
-    renderLB();
-    setTimeout(()=>{ if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = '🏆 Leaderboard'; }, 1200);
-  });
-  btnLeaderboardGame?.addEventListener('click', renderLB);
-  btnTutorialIntro?.addEventListener('click', renderTutorial);
-  btnTutorialGame?.addEventListener('click', renderTutorial);
-  btnTutorialWin?.addEventListener('click', renderTutorial);
+  if (btnLeaderboardGame) btnLeaderboardGame.addEventListener('click', renderLB);
+  if (btnTutorialIntro) btnTutorialIntro.addEventListener('click', renderTutorial);
+  if (btnTutorialGame) btnTutorialGame.addEventListener('click', renderTutorial);
+  if (btnTutorialWin) btnTutorialWin.addEventListener('click', renderTutorial);
 });
 
 // Global delegated click handler as backup
@@ -434,7 +442,7 @@ const LB_KEY = 'ccer_leaderboard_v1';
 function loadLB(){ try { return JSON.parse(localStorage.getItem(LB_KEY)) || []; } catch { return []; } }
 function saveLB(list){ localStorage.setItem(LB_KEY, JSON.stringify(list)); }
 function addLBEntry(name, score, time){ const list = loadLB(); list.push({name, score, time, date: new Date().toISOString()}); list.sort((a,b)=> b.score - a.score || a.time - b.time); const top = list.slice(0,10); saveLB(top); return top; }
-function renderLB(highlightName){ if(!lbList) return; const list = loadLB(); lbList.innerHTML = ''; if(list.length===0){ lbList.innerHTML = '<li>No scores yet. Be the first!</li>'; return; } list.forEach((e,i)=>{ const li=document.createElement('li'); li.textContent = `${i+1}. ${e.name} — ${e.score} pts in ${e.time}s`; if (highlightName && e.name===highlightName) li.classList.add('me'); lbList.appendChild(li); }); }
+// (removed legacy renderLB that used an in-DOM list element)
 
 // --- Accessibility (Dyslexia) ---
 const DYS_KEY = 'ccer_dyslexia';
@@ -729,13 +737,11 @@ btnSaveScore?.addEventListener('click', ()=>{
 btnViewLB?.addEventListener('click', ()=>{ renderLB(); });
 btnReplay?.addEventListener('click', ()=>{ showScreen(screenIntro); });
 
-lbClear?.addEventListener('click', ()=>{ localStorage.removeItem(LB_KEY); renderLB(); });
-
 // Keyboard helpers
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
-    if (toolsDialog && (toolsDialog.open || toolsDialog.hasAttribute('open'))) safeClose(toolsDialog);
-    if (tutorialDialog && (tutorialDialog.open || tutorialDialog.hasAttribute('open'))) safeClose(tutorialDialog);
+    try { if (toolsDialog && (toolsDialog.open || toolsDialog.hasAttribute('open'))) safeClose(toolsDialog); } catch(e){}
+    try { if (modal && modal.style && modal.style.display === 'flex') closeModal(); } catch(e){}
   }
   if (e.key === 'Enter' && screenGame.classList.contains('active')) btnCheck?.click();
 });
