@@ -9,7 +9,7 @@ console.log('script.js loaded — build: 2025-10-15T00:00:00Z');
 // --- Utilities: Caesar ---
 function normalizeCharCode(c) {
   const code = c.charCodeAt(0);
-document.addEventListener('DOMContentLoaded', () => {
+  if (code >= 65 && code <= 90) return { base: 65, code, isLetter: true, isUpper: true };
   if (code >= 97 && code <= 122) return { base: 97, code, isLetter: true, isUpper: false };
   return { base: null, code, isLetter: false, isUpper: false };
 }
@@ -319,6 +319,20 @@ document.addEventListener('DOMContentLoaded', () => {
   hudPIndex = document.getElementById('hud-puzzle-index');
   hudPTotal = document.getElementById('hud-puzzle-total');
 
+  // --- Game logic functions (must be defined after DOM is ready) ---
+  function updateHud(){
+    hudScore.textContent = state.score;
+    hudHints.textContent = state.hintsLeft;
+    hudTime.textContent = state.timeLeft;
+    hudPIndex.textContent = state.idx + 1;
+  }
+  function resetGame(){
+    state.idx=0; state.score=0; state.hintsLeft=3; state.timeLeft=TOTAL_TIME; updateHud(); stopMusic();
+  }
+  function startGame(){
+    resetGame(); showScreen(screenGame); hudPTotal.textContent = PUZZLES.length; loadPuzzle(state.idx); startGlobalTimer();
+  }
+
   // Attach modal-triggering listeners after DOM is ready (guarded attachments)
   if (btnStart) btnStart.addEventListener('click', startGame);
   if (btnLeaderboardIntro) {
@@ -333,6 +347,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnTutorialIntro) btnTutorialIntro.addEventListener('click', renderTutorial);
   if (btnTutorialGame) btnTutorialGame.addEventListener('click', renderTutorial);
   if (btnTutorialWin) btnTutorialWin.addEventListener('click', renderTutorial);
+
+  // Expose to global scope if needed (for other scripts)
+  window.updateHud = updateHud;
+  window.resetGame = resetGame;
+  window.startGame = startGame;
 });
 
 const puzzleTitle = document.getElementById('puzzle-title');
