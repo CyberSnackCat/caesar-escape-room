@@ -30,8 +30,8 @@ No installs or external files required — **pure HTML/CSS/JS**. Runs offline.
 ## 🛠 Tech Stack
 - **Frontend**: HTML5, CSS3, Vanilla JS
 - **Audio**: Web Audio API (in-browser synth)
-- ### What does the MIT License mean?
-The MIT License is a permissive open-source license. It allows anyone to use, copy, modify, merge, publish, distribute, sublicense, and even sell copies of the software, as long as the original copyright and license notice are included. The software is provided “as is” without warranty, which protects the author from liability.
 
 ## 📄 License
 MIT — feel free to fork, modify, and share.
+- ### What does the MIT License mean?
+The MIT License is a permissive open-source license. It allows anyone to use, copy, modify, merge, publish, distribute, sublicense, and even sell copies of the software, as long as the original copyright and license notice are included. The software is provided “as is” without warranty, which protects the author from liability.
