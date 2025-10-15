@@ -1,6 +1,6 @@
 # Caesar Cipher Escape Room — with a Cat, Music and Food!
 
-A playful, educational **browser game** that teaches the **Caesar cipher** through an escape-room narrative featuring a curious cat, musical puzzles, and tasty food clues.  
+A fun **browser game** to teach the classic - best ever - **Caesar cipher** through an escape-room narrative featuring a curious cat, musical puzzles, and tasty food clues.  
 No installs or external files required — **pure HTML/CSS/JS**. Runs offline.
 
 ## 🎯 Features
