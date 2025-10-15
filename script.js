@@ -369,6 +369,7 @@ function renderTutorial() {
 
 // Attach modal-triggering listeners after DOM is ready (guarded attachments)
 document.addEventListener('DOMContentLoaded', () => {
+  if (btnStart) btnStart.addEventListener('click', startGame);
   if (btnLeaderboardIntro) {
     btnLeaderboardIntro.addEventListener('click', () => {
       console.log('Leaderboard button clicked');
