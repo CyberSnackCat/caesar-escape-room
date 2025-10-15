@@ -3,25 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Caesar Cipher Escape Room — Cat • Music • Food Edition</title>
+  <title>Caesar & Vigenère Escape Room — Tabby • Nerdcore • Food Edition</title>
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
   <main id="app" class="container">
     <!-- Intro / Start Screen -->
     <section id="screen-intro" class="screen active" role="region" aria-labelledby="intro-title">
-      <h1 id="intro-title">Caesar Cipher Escape Room</h1>
+      <h1 id="intro-title">Benjamin’s Crypto Escape Room</h1>
       <p class="lede">
-        🐱🎶🍕 You’re locked in the school after-hours lab.
-        Your cat <strong>Cipher</strong> is prowling, music echoes from the band room, and the cafeteria smells amazing.
-        Decode the Caesar messages to unlock each door—before time runs out.
+        🐱🎶🍕 You’re at home after hours. Your <strong>tabby</strong> cat <strong>Cipher</strong> prowls your room, a lyrical <strong>nerdcore</strong> hook loops in your head,
+        and the kitchen whispers of <strong>cheese</strong>, <strong>cake</strong>, <strong>French pastries</strong>, and <strong>BBQ chicken pizza</strong>.
+        Decode the messages (Caesar + Vigenère) to unlock each “door” before time runs out.
       </p>
       <ul class="rules">
-        <li>Each puzzle is a Caesar cipher (alphabet shifted by a fixed amount).</li>
-        <li>Use hints or built-in tools (Brute Force, Frequency) to learn while you solve.</li>
-        <li>Hints cost points; faster solves earn more points.</li>
+        <li>Start with <strong>Caesar</strong> (fixed shift), unlock <strong>Vigenère</strong> (keyword‑based) bonuses.</li>
+        <li>Use <strong>Tools</strong> (brute force, frequency, Vigenère helper) and the <strong>Tutorial</strong> if stuck.</li>
+        <li>Hints cost points. Faster solves = higher score. Save your score to the <strong>leaderboard</strong>.</li>
       </ul>
-      <button id="btn-start" class="btn primary">Start</button>
+      <div class="intro-actions">
+        <button id="btn-start" class="btn primary">Start</button>
+        <button id="btn-leaderboard" class="btn">🏆 Leaderboard</button>
+        <button id="btn-tutorial-intro" class="btn">📘 Tutorial</button>
+        <button id="btn-dyslexia" class="btn" aria-pressed="false" aria-label="Toggle dyslexia-friendly mode">Aa Accessibility</button>
+      </div>
     </section>
 
     <!-- Game Screen -->
@@ -30,11 +35,12 @@
         <div>⏱️ Time: <span id="hud-time">300</span>s</div>
         <div>⭐ Score: <span id="hud-score">0</span></div>
         <div>💡 Hints Left: <span id="hud-hints">3</span></div>
-        <div>🧩 Puzzle <span id="hud-puzzle-index">1</span>/<span id="hud-puzzle-total">6</span></div>
+        <div>🧩 Puzzle <span id="hud-puzzle-index">1</span>/<span id="hud-puzzle-total">12</span></div>
         <div class="hud-right">
-          <button id="btn-sound" class="btn small" aria-pressed="false" aria-label="Toggle music mode" disabled>
-            🎵 Music: Off
-          </button>
+          <button id="btn-sound" class="btn small" aria-pressed="false" aria-label="Toggle music mode" disabled>🎵 Music: Off</button>
+          <button id="btn-tutorial" class="btn small">📘 Tutorial</button>
+          <button id="btn-dyslexia-game" class="btn small" aria-pressed="false" aria-label="Toggle dyslexia-friendly mode">Aa</button>
+          <button id="btn-leaderboard-game" class="btn small">🏆</button>
         </div>
       </header>
 
@@ -62,7 +68,7 @@
         <h3>Cryptography Tools</h3>
         <div class="tools-grid">
           <section>
-            <h4>Brute Force Explorer</h4>
+            <h4>Brute Force (Caesar)</h4>
             <label for="bf-shift">Shift (0–25)</label>
             <input type="number" id="bf-shift" min="0" max="25" value="0"/>
             <button id="bf-apply" class="btn small">Apply</button>
@@ -70,14 +76,61 @@
             <button id="bf-all" class="btn small">Show All Shifts</button>
             <pre id="bf-all-output" class="mono small"></pre>
           </section>
+
           <section>
             <h4>Letter Frequency</h4>
             <button id="freq-calc" class="btn small">Calculate</button>
             <pre id="freq-output" class="mono small"></pre>
-            <p class="hint-note">Tip: In English, E, T, A, O, I, N are common.</p>
+            <p class="hint-note">Tip: English often has E, T, A, O, I, N more frequently.</p>
+          </section>
+
+          <section>
+            <h4>Vigenère Helper</h4>
+            <label for="vig-key" class="label">Keyword</label>
+            <input type="text" id="vig-key" placeholder="Try: LYRICS, TABBY, CHEESE, PASTRY, SPICE" />
+            <div class="actions">
+              <button id="vig-preview" class="btn small">Preview Decrypt</button>
+              <button id="vig-clear" class="btn small">Clear</button>
+            </div>
+            <pre id="vig-output" class="mono small" aria-live="polite"></pre>
+            <p class="hint-note">
+              Vigenère repeats the keyword over the message and applies a Caesar shift per letter.
+              Use the Tutorial for examples.
+            </p>
           </section>
         </div>
         <button id="tools-close" class="btn">Close</button>
+      </dialog>
+
+      <!-- Leaderboard Modal -->
+      <dialog id="leaderboard-dialog" aria-label="Leaderboard">
+        <h3>🏆 Leaderboard</h3>
+        <ol id="leaderboard-list" class="leaderboard"></ol>
+        <div class="leaderboard-actions">
+          <button id="btn-clear-lb" class="btn small">Clear (this device)</button>
+          <button id="leaderboard-close" class="btn">Close</button>
+        </div>
+      </dialog>
+
+      <!-- Tutorial Modal -->
+      <dialog id="tutorial-dialog" aria-label="Tutorial">
+        <h3>📘 Tutorial: Caesar & Vigenère</h3>
+        <section>
+          <h4>Caesar (single shift)</h4>
+          <p><strong>Idea:</strong> Every letter shifts by the same amount (e.g., shift 3).</p>
+          <p><strong>Example:</strong> Shift 3 → A→D, B→E, C→F …; <code>BRING HOT SOUP FOR LUNCH</code> → shift 3 → ciphertext.</p>
+          <p>Try the <em>Brute Force</em> tool to see all 26 shifts and look for real words.</p>
+        </section>
+        <section>
+          <h4>Vigenère (keyword-based)</h4>
+          <p><strong>Idea:</strong> Use a <em>keyword</em>. Each keyword letter selects a Caesar shift, repeating across the message.</p>
+          <p><strong>Keyword → shifts:</strong> LYRICS → L(11), Y(24), R(17), I(8), C(2), S(18)</p>
+          <p><strong>Decrypting:</strong> For each message letter, subtract the keyword’s shift (wrapping the keyword).</p>
+          <p><strong>Example:</strong> Keyword <code>TABBY</code> on ciphertext of
+            <code>HIDE THE TREATS UNDER BED</code> will reveal the plaintext once the correct keyword is entered.</p>
+          <p>Use the <em>Vigenère Helper</em>: enter a keyword → <em>Preview Decrypt</em> of the current puzzle.</p>
+        </section>
+        <button id="tutorial-close" class="btn">Close</button>
       </dialog>
     </section>
 
@@ -86,12 +139,23 @@
       <h2 id="win-title">You Escaped! 🗝️</h2>
       <p>Final Score: <strong id="final-score"></strong></p>
       <p>Total Time: <strong id="final-time"></strong>s</p>
-      <button id="btn-replay" class="btn primary">Play Again</button>
+
+      <div class="save-score">
+        <label for="player-name" class="label">Save your score (name or initials)</label>
+        <input id="player-name" type="text" maxlength="24" placeholder="e.g., BENJAMIN" />
+        <button id="btn-save-score" class="btn primary">Save to Leaderboard</button>
+      </div>
+
+      <div class="post-win-actions">
+        <button id="btn-view-lb" class="btn">View Leaderboard</button>
+        <button id="btn-replay" class="btn primary">Play Again</button>
+        <button id="btn-tutorial-win" class="btn">📘 Tutorial</button>
+      </div>
     </section>
   </main>
 
   <footer class="footer">
-    <span>Cat • Music • Food Edition • Caesar cipher only (MVP)</span>
+    <span>Tabby • Nerdcore • Food Edition • Caesar + Vigenère • Built for learning</span>
   </footer>
 
   <script src="script.js"></script>

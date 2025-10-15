@@ -30,7 +30,33 @@ No installs or external files required — **pure HTML/CSS/JS**. Runs offline.
 5. **Metronome Console** — Identify the shift by scanning for real words
 6. **Final Feast** — Classic Caesar (shift 3)
 
-> All puzzles are **Caesar-only** by design to teach fundamentals.
+> All the first puzzles are **Caesar-only** by design to teach fundamentals.
+> **Bonus-level** puzzles include Vigenère cipher
+
+## 📘 Tutorial: Caesar vs. Vigenère
+
+### Caesar (single shift)
+- **Concept:** Every letter in the alphabet shifts by the same number.
+- **Example:** Shift = 3 → A→D, B→E, C→F …  
+  If plaintext is `ORDER BARBEQUE CHICKEN PIZZA`, then applying shift +3 produces the ciphertext seen in the game.  
+  **How to solve:** Use the game’s **Brute Force** tool to list all 26 shifts and scan for real words (e.g., CHICKEN, PIZZA).
+
+### Vigenère (keyword-based)
+- **Concept:** A **keyword** repeats across the text. Each keyword letter picks a Caesar shift for its position.
+- **Keyword → shifts:** LYRICS → L(11), Y(24), R(17), I(8), C(2), S(18)  
+- **Decrypting:** For each message letter, **subtract** the keyword’s shift (wrapping the keyword).
+- **Example:** Keyword `TABBY` on the ciphertext for  
+  `LIE ON THE BED WITH TABBY AND PLAY`  
+  will reveal the plaintext when the correct keyword is used.
+
+### Using the Vigenère Helper
+1. Open **Tools → Vigenère Helper**.
+2. Enter a keyword (try: `LYRICS`, `TABBY`, `PASTRY`, `CHEESE`).
+3. Click **Preview Decrypt** to see how the current ciphertext changes.
+4. Refine the keyword until the preview reads like English.
+
+> **Why classical ciphers aren’t secure today:**  
+> Caesar and Vigenère are great for learning, but easy to break with known techniques (e.g., brute force). Modern cryptography systems is far more complex. It uses publicly analyzed, strong algorithms (like the Advanced Encryption Standard) and careful key management.
 
 ## 🛠 Tech Stack
 - **Frontend**: HTML5, CSS3, Vanilla JS
