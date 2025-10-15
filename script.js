@@ -385,22 +385,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // (delegated click handler removed - handlers attached directly to buttons)
 
-// Modal helpers
-function showModal(html) {
-  console.log('showModal called');
-  modalContent.innerHTML = html;
-  modal.style.display = 'flex';
-  setTimeout(() => { modal.focus && modal.focus(); }, 10);
-}
-function closeModal() {
-  modal.style.display = 'none';
-  modalContent.innerHTML = '';
-}
-modalClose?.addEventListener('click', closeModal);
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && modal.style.display === 'flex') closeModal();
-});
-
 const finalScore = document.getElementById('final-score');
 const finalTime  = document.getElementById('final-time');
 const playerName = document.getElementById('player-name');
