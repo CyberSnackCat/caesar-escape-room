@@ -457,8 +457,18 @@ function safeShowModal(dialogEl) {
   } catch (e) {
     // fall through to fallback
   }
+  // Fallback: ensure dialog is visible and on top for debugging
   dialogEl.setAttribute('open', '');
   dialogEl.style.display = 'block';
+  dialogEl.style.position = 'fixed';
+  dialogEl.style.left = '50%';
+  dialogEl.style.top = '50%';
+  dialogEl.style.transform = 'translate(-50%, -50%)';
+  dialogEl.style.zIndex = '99999';
+  dialogEl.style.boxShadow = '0 20px 40px rgba(0,0,0,0.7)';
+  // Add a visible debug outline so user can see if it's present but hidden
+  dialogEl.style.outline = '4px solid rgba(255,255,0,0.9)';
+  console.log('safeShowModal applied fallback styles to', dialogEl.id);
 }
 
 function safeClose(dialogEl) {
