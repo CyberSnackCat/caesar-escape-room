@@ -1,7 +1,7 @@
-// =========================
+// ==========================
 // Caesar Cipher Escape Room (with Vigenere bonus levels)
 // With a Cat, Music and Food!
-// =========================
+// ==========================
 
 // --- Utilities: Caesar ---
 function normalizeCharCode(c) {
