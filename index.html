@@ -51,12 +51,10 @@
     <!-- Game Screen -->
     <section id="screen-game" class="screen" role="region" aria-live="polite">
       <!-- Universal modal placed at document root so it's never inside a hidden screen -->
-      <div id="universal-modal" class="modal" style="display:none;">
-        <div class="modal-content" id="modal-content"></div>
-        <button id="modal-close" class="btn">Close</button>
-      </div>
-
-      <script src="script.js"></script>
+        <div id="universal-modal" class="modal" style="display:none;">
+          <div class="modal-content" id="modal-content"></div>
+          <button id="modal-close" class="btn">Close</button>
+        </div>
         <div>⭐ Score: <span id="hud-score">0</span></div>
         <div>💡 Hints Left: <span id="hud-hints">3</span></div>
         <div>🧩 Puzzle <span id="hud-puzzle-index">1</span>/<span id="hud-puzzle-total">12</span></div>
@@ -154,6 +152,7 @@
     <span>Learn to love cryptography! • Built for learning</span>
   </footer>
 
+  <!-- script.js is included once at document end to avoid double-execution -->
   <script src="script.js"></script>
 </body>
 </html>
