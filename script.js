@@ -445,6 +445,36 @@ function toggleDyslexia() {
   });
 }
 
+// Safe dialog helpers: some environments may not support <dialog>. Use these helpers
+// everywhere instead of calling dialog.showModal()/dialog.close() directly.
+function safeShowModal(dialogEl) {
+  if (!dialogEl) return;
+  try {
+    if (typeof dialogEl.showModal === 'function') {
+      dialogEl.showModal();
+      return;
+    }
+  } catch (e) {
+    // fall through to fallback
+  }
+  dialogEl.setAttribute('open', '');
+  dialogEl.style.display = 'block';
+}
+
+function safeClose(dialogEl) {
+  if (!dialogEl) return;
+  try {
+    if (typeof dialogEl.close === 'function') {
+      dialogEl.close();
+      return;
+    }
+  } catch (e) {
+    // fall through to fallback
+  }
+  dialogEl.removeAttribute('open');
+  dialogEl.style.display = 'none';
+}
+
 // Initialize dialogs and event handlers when the DOM is fully loaded
 window.addEventListener('load', () => {
   // Ensure dialogs are properly initialized
@@ -465,17 +495,18 @@ window.addEventListener('load', () => {
   btnStart?.addEventListener('click', startGame);
   
   const showLeaderboard = () => {
-    if (lbDialog) {
+      if (lbDialog) {
+      console.log('showLeaderboard called');
+      if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = 'Opening…';
       renderLB();
-      lbDialog.style.display = 'block';
-      lbDialog.setAttribute('open', '');
-    }
+      safeShowModal(lbDialog);
+      setTimeout(()=>{ if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = '🏆 Leaderboard'; }, 1200);
+      }
   };
   
   const closeLeaderboard = () => {
     if (lbDialog) {
-      lbDialog.style.display = 'none';
-      lbDialog.removeAttribute('open');
+      safeClose(lbDialog);
     }
   };
 
@@ -489,15 +520,13 @@ window.addEventListener('load', () => {
 
   const showTutorial = () => {
     if (tutorialDialog) {
-      tutorialDialog.style.display = 'block';
-      tutorialDialog.setAttribute('open', '');
+      safeShowModal(tutorialDialog);
     }
   };
 
   const closeTutorial = () => {
     if (tutorialDialog) {
-      tutorialDialog.style.display = 'none';
-      tutorialDialog.removeAttribute('open');
+      safeClose(tutorialDialog);
     }
   };
 
@@ -577,7 +606,7 @@ btnHint?.addEventListener('click', ()=>{
 });
 
 btnTools?.addEventListener('click', ()=>{
-  toolsDialog.showModal();
+  safeShowModal(toolsDialog);
   // preload Caesar helper
   const ct = ciphertextEl.value;
   const s = Number(bfShift?.value) || 0;
@@ -587,7 +616,7 @@ btnTools?.addEventListener('click', ()=>{
   if (vigKey && vigKey.value) vigOut.textContent = vigenereDecrypt(ct, vigKey.value);
   else if (vigOut) vigOut.textContent = '';
 });
-toolsClose?.addEventListener('click', ()=> toolsDialog.close());
+toolsClose?.addEventListener('click', ()=> safeClose(toolsDialog));
 
 // Caesar helpers
 document.getElementById('bf-apply')?.addEventListener('click', ()=>{
@@ -638,18 +667,20 @@ btnSaveScore?.addEventListener('click', ()=>{
   const time=Number(finalTime?.textContent)||0;
   addLBEntry(name, score, time);
   if (playerName) playerName.value='';
-  renderLB(name); lbDialog.showModal();
+  renderLB(name); safeShowModal(lbDialog);
 });
-btnViewLB?.addEventListener('click', ()=>{ renderLB(); lbDialog.showModal(); });
+btnViewLB?.addEventListener('click', ()=>{ renderLB(); safeShowModal(lbDialog); });
 btnReplay?.addEventListener('click', ()=>{ showScreen(screenIntro); });
 
-lbClose?.addEventListener('click', ()=> lbDialog.close());
+lbClose?.addEventListener('click', ()=> safeClose(lbDialog));
 lbClear?.addEventListener('click', ()=>{ localStorage.removeItem(LB_KEY); renderLB(); });
 
 // Keyboard helpers
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && toolsDialog?.open) toolsDialog.close();
-  if (e.key === 'Escape' && tutorialDialog?.open) tutorialDialog.close();
+  if (e.key === 'Escape') {
+    if (toolsDialog && (toolsDialog.open || toolsDialog.hasAttribute('open'))) safeClose(toolsDialog);
+    if (tutorialDialog && (tutorialDialog.open || tutorialDialog.hasAttribute('open'))) safeClose(tutorialDialog);
+  }
   if (e.key === 'Enter' && screenGame.classList.contains('active')) btnCheck?.click();
 });
 
