@@ -355,6 +355,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Game logic functions (must be defined after DOM is ready) ---
   function updateHud(){
+    console.log('updateHud called - hudScore:', hudScore, 'hudHints:', hudHints, 'hudTime:', hudTime, 'hudPIndex:', hudPIndex);
+    if (!hudScore || !hudHints || !hudTime || !hudPIndex) {
+      console.error('HUD elements are null!', { hudScore, hudHints, hudTime, hudPIndex });
+      return;
+    }
     hudScore.textContent = state.score;
     hudHints.textContent = state.hintsLeft;
     hudTime.textContent = state.timeLeft;
@@ -364,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
     state.idx=0; state.score=0; state.hintsLeft=3; state.timeLeft=TOTAL_TIME; updateHud(); stopMusic();
   }
   function startGame(){
-    resetGame(); showScreen(screenGame); hudPTotal.textContent = PUZZLES.length; loadPuzzle(state.idx); startGlobalTimer();
+    resetGame(); showScreen(screenGame); if(hudPTotal) hudPTotal.textContent = PUZZLES.length; loadPuzzle(state.idx); startGlobalTimer();
   }
 
   // Attach modal-triggering listeners after DOM is ready (guarded attachments)
