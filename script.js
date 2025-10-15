@@ -449,6 +449,19 @@ function toggleDyslexia() {
 // everywhere instead of calling dialog.showModal()/dialog.close() directly.
 function safeShowModal(dialogEl) {
   if (!dialogEl) return;
+  let usedFallback = false;
+  // Always apply fallback styles and open attribute, regardless of native support
+  dialogEl.setAttribute('open', '');
+  dialogEl.style.display = 'block';
+  dialogEl.style.position = 'fixed';
+  dialogEl.style.left = '50%';
+  dialogEl.style.top = '50%';
+  dialogEl.style.transform = 'translate(-50%, -50%)';
+  dialogEl.style.zIndex = '99999';
+  dialogEl.style.boxShadow = '0 20px 40px rgba(0,0,0,0.7)';
+  dialogEl.style.outline = '4px solid rgba(255,255,0,0.9)';
+  usedFallback = true;
+  // Try native showModal, but fallback always applies
   try {
     if (typeof dialogEl.showModal === 'function') {
       try {
@@ -459,19 +472,32 @@ function safeShowModal(dialogEl) {
       }
     }
   } catch (e) {
-    // fall through to fallback
+    // ignore
   }
-  // Fallback: ensure dialog is visible and on top for debugging
-  dialogEl.setAttribute('open', '');
-  dialogEl.style.display = 'block';
-  dialogEl.style.position = 'fixed';
-  dialogEl.style.left = '50%';
-  dialogEl.style.top = '50%';
-  dialogEl.style.transform = 'translate(-50%, -50%)';
-  dialogEl.style.zIndex = '99999';
-  dialogEl.style.boxShadow = '0 20px 40px rgba(0,0,0,0.7)';
-  // Add a visible debug outline so user can see if it's present but hidden
-  dialogEl.style.outline = '4px solid rgba(255,255,0,0.9)';
+  // After all, check if dialog is still hidden, and if so, inject a plain modal div as a last resort
+  setTimeout(() => {
+    const style = window.getComputedStyle(dialogEl);
+    if (style.display === 'none' || style.visibility === 'hidden' || dialogEl.getBoundingClientRect().width === 0) {
+      if (!document.getElementById('fallback-modal')) {
+        const fallback = document.createElement('div');
+        fallback.id = 'fallback-modal';
+        fallback.style.position = 'fixed';
+        fallback.style.left = '50%';
+        fallback.style.top = '50%';
+        fallback.style.transform = 'translate(-50%, -50%)';
+        fallback.style.zIndex = '100000';
+        fallback.style.background = '#222';
+        fallback.style.color = '#fff';
+        fallback.style.padding = '2rem';
+        fallback.style.border = '4px solid yellow';
+        fallback.style.borderRadius = '12px';
+        fallback.style.boxShadow = '0 20px 40px rgba(0,0,0,0.7)';
+        fallback.innerHTML = '<h2>Leaderboard (Fallback)</h2><p>If you see this, your browser does not support &lt;dialog&gt; modals. Please use Chrome or Firefox for best experience.</p><button onclick="this.parentNode.remove()" style="margin-top:1rem;padding:.5rem 1.5rem;font-size:1.2rem;">Close</button>';
+        document.body.appendChild(fallback);
+        console.warn('Fallback modal injected');
+      }
+    }
+  }, 100);
   console.log('safeShowModal applied fallback styles to', dialogEl.id);
 }
 
