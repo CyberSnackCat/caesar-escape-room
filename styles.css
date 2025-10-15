@@ -108,16 +108,26 @@ dialog::backdrop { background: rgba(0,0,0,0.5); }
 
 .story { color: var(--muted); margin-top: -0.5rem; margin-bottom: 0.75rem; }
 
-/* Focus styles for accessibility */
 :focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
 
-/* responsive tweak */
 @media (max-width: 900px) {
   .hud { grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)); }
 }
 @media (max-width: 720px) {
   .tools-grid { grid-template-columns: 1fr; }
 }
+
+.intro-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+.hud-right { display: flex; gap: .5rem; justify-self: end; }
+.leaderboard { padding-left: 1.2rem; }
+.leaderboard li { margin: .25rem 0; }
+.leaderboard .me { color: var(--accent); font-weight: 700; }
+
+.tools-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+@media (max-width: 900px) { .tools-grid { grid-template-columns: 1fr; } }
+
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; background: #0b1222; padding: .5rem; border-radius: 6px; border: 1px solid #1f2937; overflow-x: auto; }
+.mono.small { font-size: .9rem; max-height: 200px; }
