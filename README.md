@@ -15,7 +15,7 @@ No installs or external files required — **pure HTML/CSS/JS**. Runs offline.
   - Toggle a chiptune loop on music puzzles (no external audio)
 - **Accessibility**:
   - Keyboard-friendly (Enter to check, Esc to close tools)
-  - High-contrast theme
+  - High-contrast theme. If you have dyslexia (like my brother) or your eyesight isn't great (mom), I got you :)
 
 ## 🧩 Puzzles (Spoiler-free overview)
 1. **Cipher the Cat** — Decode and feed the cat
@@ -30,45 +30,8 @@ No installs or external files required — **pure HTML/CSS/JS**. Runs offline.
 ## 🛠 Tech Stack
 - **Frontend**: HTML5, CSS3, Vanilla JS
 - **Audio**: Web Audio API (in-browser synth)
-
-## 🧪 Run Locally
-1. Download or clone this repo.
-2. Open `index.html` in any modern browser.
-3. Play!
-
-## 🌐 Publish on GitHub Pages
-1. Create a new public repo, e.g., `caesar-escape-room`
-2. Add these files and push to `main`
-3. In your repo: **Settings → Pages →** Source = `Deploy from a branch` → Branch = `main` → Folder = `/ (root)` → **Save**
-4. Wait ~1 minute, your site appears at:
-   ```
-   https://<your-username>.github.io/caesar-escape-room/
-   ```
-
-## 🖼 Screenshots
-Add PNGs to a `screenshots/` folder and reference them here:
-- `screenshots/01-intro.png`
-- `screenshots/02-puzzle.png`
-- `screenshots/03-tools.png`
-- `screenshots/04-win.png`
-
-```
-![Intro](screenshots/01-intro.png)
-![Puzzle](screenshots/02-puzzle.png)
-![Tools](screenshots/03-tools.png)
-![Win](screenshots/04-win.png)
-```
-
-## ✍️ How to Extend
-- Add more puzzles (change or add entries in `PUZZLES` inside `script.js`)
-- Create new **clue rules** (e.g., “enter the third word”)
-- Theme swaps: change the story copy and emojis
-- Replace the chiptune with your own WebAudio pattern
-
-## 🧑‍🎓 College Application Angle
-- **Impact**: “Built an interactive cryptography game (X players), teaching Caesar ciphers with tools and hints.”
-- **Leadership**: Tie it to your **CyberSafe** site (education for older adults), collect feedback, and iterate.
-- **Ops**: Host on GitHub Pages, track visits with privacy-friendly analytics (optional).
+- ### What does the MIT License mean?
+The MIT License is a permissive open-source license. It allows anyone to use, copy, modify, merge, publish, distribute, sublicense, and even sell copies of the software, as long as the original copyright and license notice are included. The software is provided “as is” without warranty, which protects the author from liability.
 
 ## 📄 License
 MIT — feel free to fork, modify, and share.
