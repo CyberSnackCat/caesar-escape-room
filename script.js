@@ -1,6 +1,6 @@
 // =========================
 // Caesar Cipher Escape Room
-// Cat • Music • Food Edition
+// With a Cat, Music and Food!
 // =========================
 
 // --- Utilities: Caesar cipher ---
