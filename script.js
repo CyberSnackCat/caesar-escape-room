@@ -3,6 +3,9 @@
 // With a Cat, Music and Food!
 // ==========================
 
+// Build marker: update this value when pushing changes to help detect cached scripts in users' browsers
+console.log('script.js loaded — build: 2025-10-15T00:00:00Z');
+
 // --- Utilities: Caesar ---
 function normalizeCharCode(c) {
   const code = c.charCodeAt(0);
