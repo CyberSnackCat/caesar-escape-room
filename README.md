@@ -1,7 +1,9 @@
 # Caesar Cipher Escape Room — with a Cat, Music and Food!
 
 A fun **browser game** to teach the classic - best ever - **Caesar cipher** through an escape-room narrative featuring a curious cat, musical puzzles, and tasty food clues.  
+
 The Caesar cipher is a classic way to code information in plaintext. Each letter is replaced by a letter that is a fixed number of positions elsewhere in the alphabet. The method is named after Julius Caesar, who used it in his private correspondence.
+
 No installs or external files required — **pure HTML/CSS/JS**. Runs offline.
 
 ## 🎯 Features
