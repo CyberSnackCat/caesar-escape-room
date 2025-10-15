@@ -4,7 +4,7 @@
 // ==========================
 
 // Build marker: update this value when pushing changes to help detect cached scripts in users' browsers
-console.log('script.js loaded — build: 2025-10-15T14:30:00Z — DEBUG VERSION');
+console.log('script.js loaded — build: 2025-10-15T15:00:00Z — FIXED hudTime');
 
 // --- Utilities: Caesar ---
 function normalizeCharCode(c) {
@@ -355,11 +355,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Game logic functions (must be defined after DOM is ready) ---
   function updateHud(){
-    console.log('updateHud called - hudScore:', hudScore, 'hudHints:', hudHints, 'hudTime:', hudTime, 'hudPIndex:', hudPIndex);
-    if (!hudScore || !hudHints || !hudTime || !hudPIndex) {
-      console.error('HUD elements are null!', { hudScore, hudHints, hudTime, hudPIndex });
-      return;
-    }
     hudScore.textContent = state.score;
     hudHints.textContent = state.hintsLeft;
     hudTime.textContent = state.timeLeft;
