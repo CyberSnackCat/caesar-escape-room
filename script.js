@@ -319,6 +319,45 @@ const vigClearBtn   = document.getElementById('vig-clear');
 const modal = document.getElementById('universal-modal');
 const modalContent = document.getElementById('modal-content');
 const modalClose = document.getElementById('modal-close');
+document.addEventListener('DOMContentLoaded', () => {
+  // Modal helpers
+  function showModal(html) {
+    console.log('showModal called');
+    modalContent.innerHTML = html;
+    modal.style.display = 'flex';
+    setTimeout(() => { modal.focus && modal.focus(); }, 10);
+  }
+  function closeModal() {
+    modal.style.display = 'none';
+    modalContent.innerHTML = '';
+  }
+
+  modalClose?.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.style.display === 'flex') closeModal();
+  });
+
+  // Attach modal event listeners after DOM is ready
+  btnLeaderboardIntro?.addEventListener('click', () => {
+    console.log('Leaderboard button clicked');
+    if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = 'Opening…';
+    renderLB();
+    setTimeout(()=>{ if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = '🏆 Leaderboard'; }, 1200);
+  });
+  btnLeaderboardGame?.addEventListener('click', renderLB);
+  btnTutorialIntro?.addEventListener('click', renderTutorial);
+  btnTutorialGame?.addEventListener('click', renderTutorial);
+  btnTutorialWin?.addEventListener('click', renderTutorial);
+});
+
+// Global delegated click handler as backup
+document.addEventListener('click', (e) => {
+  const t = e.target;
+  if (t && t.id === 'btn-leaderboard') {
+    console.log('Delegated: Leaderboard button clicked');
+    renderLB();
+  }
+});
 
 // Modal helpers
 function showModal(html) {
