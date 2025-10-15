@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ==========================
 
 // Build marker: make sure to update this value when pushing changes to help detect cached scripts in users' browsers
-console.log('script.js loaded — build: 2025-10-15T15:30:00Z — ALL LISTENERS IN DOMContentLoaded');
+console.log('script.js loaded — build: 2025-10-15T16:10:00Z — ALL LISTENERS IN DOMContentLoaded');
 
 // --- Utilities: Caesar ---
 function normalizeCharCode(c) {
