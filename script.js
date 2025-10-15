@@ -3,7 +3,7 @@
 // With a Cat, Music and Food!
 // ==========================
 
-// Build marker: update this value when pushing changes to help detect cached scripts in users' browsers
+// Build marker: make sure to update this value when pushing changes to help detect cached scripts in users' browsers
 console.log('script.js loaded — build: 2025-10-15T15:30:00Z — ALL LISTENERS IN DOMContentLoaded');
 
 // --- Utilities: Caesar ---
@@ -97,7 +97,7 @@ const PUZZLES = [
   // 1 🐱 Tabby cat
   {
     title: 'Door 1 — Cipher the Tabby',
-    story: 'Your tabby cat, Cipher 🐱, drops a collar tag on your bed. A Caesar message is scratched on the back.',
+    story: 'Your tabby cat, Cipher 🐱, drops her collar tag on your bed. A Caesar message is scratched on the back.',
     type: 'decode', shift: 5,
     plaintext: 'FEED THE TABBY CAT TUNA AT NOON',
     hints: [
@@ -111,8 +111,8 @@ const PUZZLES = [
 
   // 2 🎶 Lyrical nerdcore (identify shift)
   {
-    title: 'Door 2 — Lyrical Nerdcore Console',
-    story: 'Your lyric sheet is scrambled on the screen. Caesar again—identify the shift.',
+    title: 'Door 2 — Listening to your Nerdcore Music',
+    story: 'You were looking at the lyrics to one of your favorite tracks on your pc - but the sheet of lyrics is scrambled on your screen. Caesar cipher again—identify the shift.',
     type: 'identify', shift: 13, // ROT13
     plaintext: 'PLAY THE LYRICAL NERDCORE THEN OPEN',
     hints: [
@@ -126,8 +126,8 @@ const PUZZLES = [
 
   // 3 🍰 Food clue — cheese(cake)
   {
-    title: 'Door 3 — Cheesecake Clue',
-    story: 'Kitchen note smells sweet. Decode, then enter the food word right after THE.',
+    title: 'Door 3 — Snack Time',
+    story: 'You want a snack. Whats new? Teenagers need food. Amazing smells are coming from the kitchen. Is your mother making a special dessert? Decode, then enter the food word right after THE.',
     type: 'clue', shift: 19,
     plaintext: 'GRAB THE CHEESECAKE AND EXIT',
     hints: [
@@ -142,8 +142,8 @@ const PUZZLES = [
 
   // 4 🪟 Tabby mischief (clue)
   {
-    title: 'Door 4 — Tabby Window Clue',
-    story: 'Cipher knocks a plant; a taped note appears. Decode, then enter the word after THE.',
+    title: 'Door 4 — Back in Your Room',
+    story: 'Cipher jumps at your entrance and knocks over a plant; a taped note appears underneath it. Decode, then enter the word after THE.',
     type: 'clue', shift: 11,
     plaintext: 'CHECK THE WINDOW LATCH',
     hints: [
@@ -159,7 +159,7 @@ const PUZZLES = [
   // 5 🎼 Tempo (identify)
   {
     title: 'Door 5 — Keep the Tempo',
-    story: 'The metronome ticks. Identify the Caesar shift.',
+    story: 'You need to practice your musical instrument for orchestra tomorrow. The metronome ticks. Identify the Caesar shift.',
     type: 'identify', shift: 8,
     plaintext: 'KEEP THE TEMPO COUNT FOUR',
     hints: [
@@ -173,8 +173,8 @@ const PUZZLES = [
 
   // 6 🍕 Final feast (Caesar decode) — BBQ chicken pizza
   {
-    title: 'Door 6 — BBQ Chicken Pizza',
-    story: 'A delivery reminder pops up. Decode the Caesar note to confirm the order.',
+    title: 'Door 6 — Dinner Time',
+    story: 'Your phone buzzes. A delivery order reminder pops up. Decode the Caesar note to confirm the order.',
     type: 'decode', shift: 3,
     plaintext: 'ORDER BARBEQUE CHICKEN PIZZA',
     hints: [
@@ -189,8 +189,8 @@ const PUZZLES = [
   // --- Vigenère bonuses & more personalization ---
   // 7 🎶 Vigenère: enter keyword
   {
-    title: 'Door 7 — Bonus: Lyrical Hook (Vigenère)',
-    story: 'A Vigenère lock guards the lyric sheet. Enter the keyword to reveal the hook.',
+    title: 'Door 7 — Bonus: Song Lyric (Vigenère)',
+    story: 'A Vigenère lock guards the lyric sheet. Enter the keyword to reveal the lyrical hook.',
     type: 'vigenere-key', key: 'LYRICS',
     plaintext: 'WRITE THE LYRICAL NERDCORE HOOK',
     hints: [
@@ -203,8 +203,8 @@ const PUZZLES = [
 
   // 8 🐱 Vigenère: enter plaintext with cat & bed
   {
-    title: 'Door 8 — Bonus: Bed & Tabby (Vigenère)',
-    story: 'Cipher curls on your bed. Decode the note (Vigenère) and enter the plaintext.',
+    title: 'Door 8 — Bonus: Time for Rest (Vigenère)',
+    story: 'Cipher curls up beside you on your bed. Decode the note (Vigenère) and enter the plaintext.',
     type: 'vigenere-decode', key: 'TABBY',
     plaintext: 'LIE ON THE BED WITH TABBY AND PLAY',
     hints: [
@@ -217,8 +217,8 @@ const PUZZLES = [
 
   // 9 🍰 Vigenère: enter keyword — pastries
   {
-    title: 'Door 9 — Bonus: French Pastry (Vigenère)',
-    story: 'A pastry bag has a code tag. Enter the keyword to read it.',
+    title: 'Door 9 — Bonus: Mmmmmm... a friend offers you a bag of chocolate croissants and macarons (Vigenère)',
+    story: 'The bag of pastries has a code tag on it. Enter the keyword to read it.',
     type: 'vigenere-key', key: 'PASTRY',
     plaintext: 'SAVE THE FRENCH PASTRIES FOR HOME',
     hints: [
@@ -231,8 +231,8 @@ const PUZZLES = [
 
   // 10 🍕 Identify shift — pizza again, just to tempt fate
   {
-    title: 'Door 10 — Bonus: Pizza Countdown',
-    story: 'Clock is ticking. Identify the Caesar shift to finalize the pizza run.',
+    title: 'Door 10 — Bonus: Dinner Countdown',
+    story: 'The clock is ticking while you wait for dinner. Identify the Caesar shift to make sure the pizza order was correct.',
     type: 'identify', shift: 6,
     plaintext: 'GET THE BARBEQUE CHICKEN PIZZA',
     hints: [
@@ -246,8 +246,8 @@ const PUZZLES = [
 
   // 11 🧀 Vigenère decode — cheese & cake
   {
-    title: 'Door 11 — Bonus: Cheese & Cake (Vigenère)',
-    story: 'A fridge magnet hides a code. Decode and enter the plaintext.',
+    title: 'Door 11 — Bonus: Dessert (Vigenère)',
+    story: 'After a tasty pizza, you wonder what else you can find in the kitchen. A fridge magnet hides a code. Decode and enter the plaintext.',
     type: 'vigenere-decode', key: 'CHEESE',
     plaintext: 'BRING CHEESE AND CAKE HOME',
     hints: [
