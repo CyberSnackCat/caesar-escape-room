@@ -291,9 +291,16 @@ let screenIntro, screenGame, screenWin;
 let btnStart, btnLeaderboardIntro, btnLeaderboardGame, btnTutorialIntro, btnTutorialGame, btnTutorialWin, btnDyslexiaIntro, btnDyslexiaGame;
 let btnCheck, btnHint, btnTools, btnSound, feedback;
 let hudTime, hudScore, hudHints, hudPIndex, hudPTotal;
+let puzzleTitle, puzzleStory, ciphertextEl, promptArea;
+let toolsDialog, toolsClose;
+let bfShift, bfOutput, bfAllOut;
+let freqOut;
+let vigKey, vigOut, vigPreviewBtn, vigClearBtn;
+let modal, modalContent, modalClose;
+let finalScore, finalTime, playerName, btnSaveScore, btnReplay, btnViewLB;
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Query all DOM elements after DOM is ready
+  // Query ALL DOM elements after DOM is ready
   screenIntro = document.getElementById('screen-intro');
   screenGame  = document.getElementById('screen-game');
   screenWin   = document.getElementById('screen-win');
@@ -318,6 +325,33 @@ document.addEventListener('DOMContentLoaded', () => {
   hudHints  = document.getElementById('hud-hints');
   hudPIndex = document.getElementById('hud-puzzle-index');
   hudPTotal = document.getElementById('hud-puzzle-total');
+
+  puzzleTitle = document.getElementById('puzzle-title');
+  puzzleStory = document.getElementById('puzzle-story');
+  ciphertextEl = document.getElementById('ciphertext');
+  promptArea = document.getElementById('prompt-area');
+
+  toolsDialog = document.getElementById('tools-dialog');
+  toolsClose  = document.getElementById('tools-close');
+  bfShift = document.getElementById('bf-shift');
+  bfOutput = document.getElementById('bf-output');
+  bfAllOut = document.getElementById('bf-all-output');
+  freqOut = document.getElementById('freq-output');
+  vigKey  = document.getElementById('vig-key');
+  vigOut  = document.getElementById('vig-output');
+  vigPreviewBtn = document.getElementById('vig-preview');
+  vigClearBtn   = document.getElementById('vig-clear');
+
+  modal = document.getElementById('universal-modal');
+  modalContent = document.getElementById('modal-content');
+  modalClose = document.getElementById('modal-close');
+
+  finalScore = document.getElementById('final-score');
+  finalTime  = document.getElementById('final-time');
+  playerName = document.getElementById('player-name');
+  btnSaveScore = document.getElementById('btn-save-score');
+  btnReplay  = document.getElementById('btn-replay');
+  btnViewLB  = document.getElementById('btn-view-lb');
 
   // --- Game logic functions (must be defined after DOM is ready) ---
   function updateHud(){
@@ -348,36 +382,17 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnTutorialGame) btnTutorialGame.addEventListener('click', renderTutorial);
   if (btnTutorialWin) btnTutorialWin.addEventListener('click', renderTutorial);
 
+  // Attach basic modal listeners
+  if (modalClose) modalClose.addEventListener('click', closeModal);
+
+  // Apply dyslexia mode from storage
+  applyDyslexiaFromStorage();
+
   // Expose to global scope if needed (for other scripts)
   window.updateHud = updateHud;
   window.resetGame = resetGame;
   window.startGame = startGame;
 });
-
-const puzzleTitle = document.getElementById('puzzle-title');
-const puzzleStory = document.getElementById('puzzle-story');
-const ciphertextEl = document.getElementById('ciphertext');
-const promptArea = document.getElementById('prompt-area');
-
-const toolsDialog = document.getElementById('tools-dialog');
-const toolsClose  = document.getElementById('tools-close');
-// Caesar tool elems
-const bfShift = document.getElementById('bf-shift');
-const bfOutput = document.getElementById('bf-output');
-const bfAllOut = document.getElementById('bf-all-output');
-// Frequency elem
-const freqOut = document.getElementById('freq-output');
-// Vigenère helper elems
-const vigKey  = document.getElementById('vig-key');
-const vigOut  = document.getElementById('vig-output');
-const vigPreviewBtn = document.getElementById('vig-preview');
-const vigClearBtn   = document.getElementById('vig-clear');
-
-
-// Universal modal elements (should exist at document root)
-const modal = document.getElementById('universal-modal');
-const modalContent = document.getElementById('modal-content');
-const modalClose = document.getElementById('modal-close');
 
 // Single shared modal helpers (global functions used throughout)
 function showModal(html) {
@@ -394,8 +409,7 @@ function closeModal() {
   modalContent.innerHTML = '';
 }
 
-// Attach basic modal listeners now
-modalClose?.addEventListener('click', closeModal);
+// Attach escape key listener for modal
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && modal && modal.style && modal.style.display === 'flex') closeModal();
 });
@@ -422,39 +436,6 @@ function renderTutorial() {
   `;
   showModal(html);
 }
-
-// Attach modal-triggering listeners after DOM is ready (guarded attachments)
-document.addEventListener('DOMContentLoaded', () => {
-  if (btnStart) btnStart.addEventListener('click', startGame);
-  if (btnLeaderboardIntro) {
-    btnLeaderboardIntro.addEventListener('click', () => {
-      console.log('Leaderboard button clicked');
-      if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = 'Opening…';
-      renderLB();
-      setTimeout(()=>{ if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = '🏆 Leaderboard'; }, 1200);
-    });
-  }
-  if (btnLeaderboardGame) btnLeaderboardGame.addEventListener('click', renderLB);
-  if (btnTutorialIntro) btnTutorialIntro.addEventListener('click', renderTutorial);
-  if (btnTutorialGame) btnTutorialGame.addEventListener('click', renderTutorial);
-  if (btnTutorialWin) btnTutorialWin.addEventListener('click', renderTutorial);
-});
-
-// (delegated click handler removed - handlers attached directly to buttons)
-
-
-let finalScore, finalTime, playerName, btnSaveScore, btnReplay, btnViewLB;
-
-document.addEventListener('DOMContentLoaded', () => {
-  // ...existing code...
-  finalScore = document.getElementById('final-score');
-  finalTime  = document.getElementById('final-time');
-  playerName = document.getElementById('player-name');
-  btnSaveScore = document.getElementById('btn-save-score');
-  btnReplay  = document.getElementById('btn-replay');
-  btnViewLB  = document.getElementById('btn-view-lb');
-  // ...existing code...
-});
 
 // --- WebAudio (music mode) ---
 let audioCtx = null, masterGain = null, beatTimer = null, isAudioReady = false;
