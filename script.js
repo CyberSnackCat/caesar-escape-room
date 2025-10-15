@@ -4,7 +4,7 @@
 // ==========================
 
 // Build marker: update this value when pushing changes to help detect cached scripts in users' browsers
-console.log('script.js loaded — build: 2025-10-15T15:00:00Z — FIXED hudTime');
+console.log('script.js loaded — build: 2025-10-15T15:30:00Z — ALL LISTENERS IN DOMContentLoaded');
 
 // --- Utilities: Caesar ---
 function normalizeCharCode(c) {
@@ -388,6 +388,142 @@ document.addEventListener('DOMContentLoaded', () => {
   // Apply dyslexia mode from storage
   applyDyslexiaFromStorage();
 
+  // --- Game button event listeners (must be inside DOMContentLoaded) ---
+  
+  // Check button
+  if (btnCheck) btnCheck.addEventListener('click', ()=>{
+    const p = PUZZLES[state.idx]; let ok = false;
+
+    if (p.type === 'decode') {
+      const input = document.getElementById('answer').value;
+      ok = p.validation(input);
+    } else if (p.type === 'identify') {
+      const s = document.getElementById('shift').value;
+      ok = p.validation(s);
+      if (ok) {
+        feedback.className = 'feedback ok';
+        feedback.textContent = `Correct! Plaintext: "${caesarDecrypt(p.ciphertext, Number(s))}"`;
+      }
+    } else if (p.type === 'clue') {
+      const input = document.getElementById('answer').value;
+      const decoded = caesarDecrypt(p.ciphertext, p.shift);
+      const expected = p.extractAnswer ? p.extractAnswer(decoded) : '';
+      ok = p.validation(input, decoded, expected);
+      if (!ok && expected && normalize(input) === normalize(decoded)) {
+        feedback.className = 'feedback warn';
+        feedback.textContent = `You decoded the whole sentence! Enter just the single word after "THE".`;
+        return;
+      }
+    } else if (p.type === 'vigenere-key') {
+      const inputKey = onlyLetters(document.getElementById('answer').value);
+      ok = inputKey === onlyLetters(p.key);
+      if (ok) {
+        feedback.className = 'feedback ok';
+        feedback.textContent = `Correct keyword! Plaintext: "${vigenereDecrypt(p.ciphertext, p.key)}"`;
+      }
+    } else if (p.type === 'vigenere-decode') {
+      const input = document.getElementById('answer').value;
+      ok = normalize(input) === normalize(p.plaintext);
+    }
+
+    if (ok) {
+      const gained = award(50);
+      feedback.className = 'feedback ok';
+      feedback.textContent = `✅ Correct! +${gained} points.`;
+      setTimeout(()=>{ state.idx += 1; if (state.idx >= PUZZLES.length) { endGame(); } else { updateHud(); loadPuzzle(state.idx); } }, 800);
+    } else {
+      feedback.className = 'feedback err';
+      feedback.textContent = 'Not quite—try Tools or use a hint.';
+    }
+  });
+
+  // Hint button
+  if (btnHint) btnHint.addEventListener('click', ()=>{
+    const p = PUZZLES[state.idx];
+    if (state.hintsLeft <= 0) { feedback.className='feedback warn'; feedback.textContent='No hints left!'; return; }
+    const used = 3 - state.hintsLeft;
+    const hint = p.hints[Math.min(used, p.hints.length - 1)];
+    state.hintsLeft -= 1;
+    state.score = Math.max(0, state.score - 10);
+    feedback.className = 'feedback warn';
+    feedback.textContent = `Hint: ${hint} (−10 points)`;
+    updateHud();
+  });
+
+  // Tools button
+  if (btnTools) btnTools.addEventListener('click', ()=>{
+    safeShowModal(toolsDialog);
+    const ct = ciphertextEl.value;
+    const s = Number(bfShift?.value) || 0;
+    if (bfOutput) bfOutput.textContent = caesarDecrypt(ct, s);
+    if (bfAllOut) bfAllOut.textContent = '';
+    if (vigKey && vigKey.value) vigOut.textContent = vigenereDecrypt(ct, vigKey.value);
+    else if (vigOut) vigOut.textContent = '';
+  });
+  
+  if (toolsClose) toolsClose.addEventListener('click', ()=> safeClose(toolsDialog));
+
+  // Caesar tool helpers
+  document.getElementById('bf-apply')?.addEventListener('click', ()=>{
+    const ct = ciphertextEl.value;
+    const s = Number(document.getElementById('bf-shift').value) || 0;
+    if (document.getElementById('bf-output')) document.getElementById('bf-output').textContent = caesarDecrypt(ct, s);
+  });
+  
+  document.getElementById('bf-all')?.addEventListener('click', ()=>{
+    const ct = ciphertextEl.value;
+    const lines = []; for (let s=0; s<26; s++) lines.push(`${s.toString().padStart(2,'0')}: ${caesarDecrypt(ct, s)}`);
+    if (bfAllOut) bfAllOut.textContent = lines.join('\n');
+  });
+
+  // Frequency calculator
+  document.getElementById('freq-calc')?.addEventListener('click', ()=>{
+    const ct=ciphertextEl.value; const {freq,total}=frequencyMap(ct);
+    const alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const rows = alphabet.split('').map((ch,i)=>{
+      const n=freq[i]; const pct=total?((n/total)*100).toFixed(1):'0.0';
+      return `${ch}: ${String(n).padStart(3,' ')} (${pct}%) ${'#'.repeat(Math.min(20, Math.round((n/Math.max(1,total))*40)))}`;
+    });
+    if (freqOut) freqOut.textContent = `Total letters: ${total}\n` + rows.join('\n');
+  });
+
+  // Vigenère helper
+  if (vigPreviewBtn) vigPreviewBtn.addEventListener('click', ()=>{
+    const key = vigKey?.value || '';
+    const ct  = ciphertextEl.value || '';
+    if (!key.trim()) { vigOut.textContent = 'Enter a keyword to preview decryption.'; return; }
+    vigOut.textContent = vigenereDecrypt(ct, key);
+  });
+  
+  if (vigClearBtn) vigClearBtn.addEventListener('click', ()=>{
+    if (vigKey) vigKey.value = '';
+    if (vigOut) vigOut.textContent = '';
+  });
+
+  // Music toggle
+  if (btnSound) btnSound.addEventListener('click', async ()=>{
+    const p=PUZZLES[state.idx]; if(!p.music) return;
+    if(!audioCtx) setupAudio(); try{ if(audioCtx.state==='suspended') await audioCtx.resume(); }catch{}
+    state.musicOn ? stopMusic() : startMusic();
+  });
+
+  // Leaderboard & Win screen buttons
+  if (btnSaveScore) btnSaveScore.addEventListener('click', ()=>{
+    const name=(playerName?.value||'PLAYER').toUpperCase().slice(0,24);
+    const score=Number(finalScore?.textContent)||0;
+    const time=Number(finalTime?.textContent)||0;
+    addLBEntry(name, score, time);
+    if (playerName) playerName.value='';
+    renderLB(name);
+  });
+  
+  if (btnViewLB) btnViewLB.addEventListener('click', ()=>{ renderLB(); });
+  if (btnReplay) btnReplay.addEventListener('click', ()=>{ showScreen(screenIntro); });
+
+  // Dyslexia toggle buttons
+  if (btnDyslexiaIntro) btnDyslexiaIntro.addEventListener('click', toggleDyslexia);
+  if (btnDyslexiaGame) btnDyslexiaGame.addEventListener('click', toggleDyslexia);
+
   // Expose to global scope if needed (for other scripts)
   window.updateHud = updateHud;
   window.resetGame = resetGame;
@@ -634,142 +770,3 @@ function safeClose(dialogEl) {
   dialogEl.removeAttribute('open');
   dialogEl.style.display = 'none';
 }
-
-// Legacy dialog logic removed — using universal modal and delegated handlers instead
-
-btnCheck?.addEventListener('click', ()=>{
-  const p = PUZZLES[state.idx]; let ok = false;
-
-  if (p.type === 'decode') {
-    const input = document.getElementById('answer').value;
-    ok = p.validation(input);
-  } else if (p.type === 'identify') {
-    const s = document.getElementById('shift').value;
-    ok = p.validation(s);
-    if (ok) {
-      feedback.className = 'feedback ok';
-      feedback.textContent = `Correct! Plaintext: "${caesarDecrypt(p.ciphertext, Number(s))}"`;
-    }
-  } else if (p.type === 'clue') {
-    const input = document.getElementById('answer').value;
-    const decoded = caesarDecrypt(p.ciphertext, p.shift);
-    const expected = p.extractAnswer ? p.extractAnswer(decoded) : '';
-    ok = p.validation(input, decoded, expected);
-    if (!ok && expected && normalize(input) === normalize(decoded)) {
-      feedback.className = 'feedback warn';
-      feedback.textContent = `You decoded the whole sentence! Enter just the single word after "THE".`;
-      return;
-    }
-  } else if (p.type === 'vigenere-key') {
-    const inputKey = onlyLetters(document.getElementById('answer').value);
-    ok = inputKey === onlyLetters(p.key);
-    if (ok) {
-      feedback.className = 'feedback ok';
-      feedback.textContent = `Correct keyword! Plaintext: "${vigenereDecrypt(p.ciphertext, p.key)}"`;
-    }
-  } else if (p.type === 'vigenere-decode') {
-    const input = document.getElementById('answer').value;
-    ok = normalize(input) === normalize(p.plaintext);
-  }
-
-  if (ok) {
-    const gained = award(50);
-    feedback.className = 'feedback ok';
-    feedback.textContent = `✅ Correct! +${gained} points.`;
-    setTimeout(()=>{ state.idx += 1; if (state.idx >= PUZZLES.length) { endGame(); } else { updateHud(); loadPuzzle(state.idx); } }, 800);
-  } else {
-    feedback.className = 'feedback err';
-    feedback.textContent = 'Not quite—try Tools or use a hint.';
-  }
-});
-
-btnHint?.addEventListener('click', ()=>{
-  const p = PUZZLES[state.idx];
-  if (state.hintsLeft <= 0) { feedback.className='feedback warn'; feedback.textContent='No hints left!'; return; }
-  const used = 3 - state.hintsLeft;
-  const hint = p.hints[Math.min(used, p.hints.length - 1)];
-  state.hintsLeft -= 1;
-  state.score = Math.max(0, state.score - 10);
-  feedback.className = 'feedback warn';
-  feedback.textContent = `Hint: ${hint} (−10 points)`;
-  updateHud();
-});
-
-btnTools?.addEventListener('click', ()=>{
-  safeShowModal(toolsDialog);
-  // preload Caesar helper
-  const ct = ciphertextEl.value;
-  const s = Number(bfShift?.value) || 0;
-  if (bfOutput) bfOutput.textContent = caesarDecrypt(ct, s);
-  if (bfAllOut) bfAllOut.textContent = '';
-  // preload Vigenère helper preview if key present
-  if (vigKey && vigKey.value) vigOut.textContent = vigenereDecrypt(ct, vigKey.value);
-  else if (vigOut) vigOut.textContent = '';
-});
-toolsClose?.addEventListener('click', ()=> safeClose(toolsDialog));
-
-// Caesar helpers
-document.getElementById('bf-apply')?.addEventListener('click', ()=>{
-  const ct = ciphertextEl.value;
-  const s = Number(document.getElementById('bf-shift').value) || 0;
-  if (document.getElementById('bf-output')) document.getElementById('bf-output').textContent = caesarDecrypt(ct, s);
-});
-document.getElementById('bf-all')?.addEventListener('click', ()=>{
-  const ct = ciphertextEl.value;
-  const lines = []; for (let s=0; s<26; s++) lines.push(`${s.toString().padStart(2,'0')}: ${caesarDecrypt(ct, s)}`);
-  if (bfAllOut) bfAllOut.textContent = lines.join('\n');
-});
-
-// Frequency
-document.getElementById('freq-calc')?.addEventListener('click', ()=>{
-  const ct=ciphertextEl.value; const {freq,total}=frequencyMap(ct);
-  const alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const rows = alphabet.split('').map((ch,i)=>{
-    const n=freq[i]; const pct=total?((n/total)*100).toFixed(1):'0.0';
-    return `${ch}: ${String(n).padStart(3,' ')} (${pct}%) ${'#'.repeat(Math.min(20, Math.round((n/Math.max(1,total))*40)))}`;
-  });
-  if (freqOut) freqOut.textContent = `Total letters: ${total}\n` + rows.join('\n');
-});
-
-// Vigenère helper
-vigPreviewBtn?.addEventListener('click', ()=>{
-  const key = vigKey?.value || '';
-  const ct  = ciphertextEl.value || '';
-  if (!key.trim()) { vigOut.textContent = 'Enter a keyword to preview decryption.'; return; }
-  vigOut.textContent = vigenereDecrypt(ct, key);
-});
-vigClearBtn?.addEventListener('click', ()=>{
-  if (vigKey) vigKey.value = '';
-  if (vigOut) vigOut.textContent = '';
-});
-
-// Music toggle
-btnSound?.addEventListener('click', async ()=>{
-  const p=PUZZLES[state.idx]; if(!p.music) return;
-  if(!audioCtx) setupAudio(); try{ if(audioCtx.state==='suspended') await audioCtx.resume(); }catch{}
-  state.musicOn ? stopMusic() : startMusic();
-});
-
-// Leaderboard & Win screen
-btnSaveScore?.addEventListener('click', ()=>{
-  const name=(playerName?.value||'PLAYER').toUpperCase().slice(0,24);
-  const score=Number(finalScore?.textContent)||0;
-  const time=Number(finalTime?.textContent)||0;
-  addLBEntry(name, score, time);
-  if (playerName) playerName.value='';
-  renderLB(name);
-});
-btnViewLB?.addEventListener('click', ()=>{ renderLB(); });
-btnReplay?.addEventListener('click', ()=>{ showScreen(screenIntro); });
-
-// Keyboard helpers
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    try { if (toolsDialog && (toolsDialog.open || toolsDialog.hasAttribute('open'))) safeClose(toolsDialog); } catch(e){}
-    try { if (modal && modal.style && modal.style.display === 'flex') closeModal(); } catch(e){}
-  }
-  if (e.key === 'Enter' && screenGame.classList.contains('active')) btnCheck?.click();
-});
-
-// Start
-applyDyslexiaFromStorage();
