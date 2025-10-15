@@ -451,8 +451,12 @@ function safeShowModal(dialogEl) {
   if (!dialogEl) return;
   try {
     if (typeof dialogEl.showModal === 'function') {
-      dialogEl.showModal();
-      return;
+      try {
+        dialogEl.showModal();
+        console.log('native showModal called for', dialogEl.id);
+      } catch (err) {
+        console.warn('native showModal threw for', dialogEl.id, err);
+      }
     }
   } catch (e) {
     // fall through to fallback
