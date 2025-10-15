@@ -272,31 +272,55 @@ for (const p of PUZZLES) {
 const TOTAL_TIME = 300;
 const state = { idx: 0, score: 0, hintsLeft: 3, timeLeft: TOTAL_TIME, timerId: null, musicOn: false };
 
+
 // --- DOM ---
-const screenIntro = document.getElementById('screen-intro');
-const screenGame  = document.getElementById('screen-game');
-const screenWin   = document.getElementById('screen-win');
+let screenIntro, screenGame, screenWin;
+let btnStart, btnLeaderboardIntro, btnLeaderboardGame, btnTutorialIntro, btnTutorialGame, btnTutorialWin, btnDyslexiaIntro, btnDyslexiaGame;
+let btnCheck, btnHint, btnTools, btnSound, feedback;
+let hudTime, hudScore, hudHints, hudPIndex, hudPTotal;
 
-const btnStart = document.getElementById('btn-start');
-const btnLeaderboardIntro = document.getElementById('btn-leaderboard');
-const btnLeaderboardGame = document.getElementById('btn-leaderboard-game');
-const btnTutorialIntro = document.getElementById('btn-tutorial-intro');
-const btnTutorialGame = document.getElementById('btn-tutorial');
-const btnTutorialWin = document.getElementById('btn-tutorial-win');
-const btnDyslexiaIntro = document.getElementById('btn-dyslexia');
-const btnDyslexiaGame = document.getElementById('btn-dyslexia-game');
+document.addEventListener('DOMContentLoaded', () => {
+  // Query all DOM elements after DOM is ready
+  screenIntro = document.getElementById('screen-intro');
+  screenGame  = document.getElementById('screen-game');
+  screenWin   = document.getElementById('screen-win');
 
-const btnCheck = document.getElementById('btn-check');
-const btnHint  = document.getElementById('btn-hint');
-const btnTools = document.getElementById('btn-tools');
-const btnSound = document.getElementById('btn-sound');
-const feedback = document.getElementById('feedback');
+  btnStart = document.getElementById('btn-start');
+  btnLeaderboardIntro = document.getElementById('btn-leaderboard');
+  btnLeaderboardGame = document.getElementById('btn-leaderboard-game');
+  btnTutorialIntro = document.getElementById('btn-tutorial-intro');
+  btnTutorialGame = document.getElementById('btn-tutorial');
+  btnTutorialWin = document.getElementById('btn-tutorial-win');
+  btnDyslexiaIntro = document.getElementById('btn-dyslexia');
+  btnDyslexiaGame = document.getElementById('btn-dyslexia-game');
 
-const hudTime   = document.getElementById('hud-time');
-const hudScore  = document.getElementById('hud-score');
-const hudHints  = document.getElementById('hud-hints');
-const hudPIndex = document.getElementById('hud-puzzle-index');
-const hudPTotal = document.getElementById('hud-puzzle-total');
+  btnCheck = document.getElementById('btn-check');
+  btnHint  = document.getElementById('btn-hint');
+  btnTools = document.getElementById('btn-tools');
+  btnSound = document.getElementById('btn-sound');
+  feedback = document.getElementById('feedback');
+
+  hudTime   = document.getElementById('hud-time');
+  hudScore  = document.getElementById('hud-score');
+  hudHints  = document.getElementById('hud-hints');
+  hudPIndex = document.getElementById('hud-puzzle-index');
+  hudPTotal = document.getElementById('hud-puzzle-total');
+
+  // Attach modal-triggering listeners after DOM is ready (guarded attachments)
+  if (btnStart) btnStart.addEventListener('click', startGame);
+  if (btnLeaderboardIntro) {
+    btnLeaderboardIntro.addEventListener('click', () => {
+      console.log('Leaderboard button clicked');
+      if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = 'Opening…';
+      renderLB();
+      setTimeout(()=>{ if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = '🏆 Leaderboard'; }, 1200);
+    });
+  }
+  if (btnLeaderboardGame) btnLeaderboardGame.addEventListener('click', renderLB);
+  if (btnTutorialIntro) btnTutorialIntro.addEventListener('click', renderTutorial);
+  if (btnTutorialGame) btnTutorialGame.addEventListener('click', renderTutorial);
+  if (btnTutorialWin) btnTutorialWin.addEventListener('click', renderTutorial);
+});
 
 const puzzleTitle = document.getElementById('puzzle-title');
 const puzzleStory = document.getElementById('puzzle-story');
@@ -386,12 +410,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // (delegated click handler removed - handlers attached directly to buttons)
 
-const finalScore = document.getElementById('final-score');
-const finalTime  = document.getElementById('final-time');
-const playerName = document.getElementById('player-name');
-const btnSaveScore = document.getElementById('btn-save-score');
-const btnReplay  = document.getElementById('btn-replay');
-const btnViewLB  = document.getElementById('btn-view-lb');
+
+let finalScore, finalTime, playerName, btnSaveScore, btnReplay, btnViewLB;
+
+document.addEventListener('DOMContentLoaded', () => {
+  // ...existing code...
+  finalScore = document.getElementById('final-score');
+  finalTime  = document.getElementById('final-time');
+  playerName = document.getElementById('player-name');
+  btnSaveScore = document.getElementById('btn-save-score');
+  btnReplay  = document.getElementById('btn-replay');
+  btnViewLB  = document.getElementById('btn-view-lb');
+  // ...existing code...
+});
 
 // --- WebAudio (music mode) ---
 let audioCtx = null, masterGain = null, beatTimer = null, isAudioReady = false;
