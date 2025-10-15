@@ -5,6 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Caesar & Vigenère Escape Room</title>
   <link rel="stylesheet" href="styles.css"/>
+  <script>
+    // Dialog polyfill
+    if (!('showModal' in document.createElement('dialog'))) {
+      const dialogs = document.getElementsByTagName('dialog');
+      Array.from(dialogs).forEach(dialog => {
+        if (!dialog.showModal) {
+          dialog.showModal = function() {
+            this.setAttribute('open', '');
+            this.style.display = 'block';
+          };
+          dialog.close = function() {
+            this.removeAttribute('open');
+            this.style.display = 'none';
+          };
+        }
+      });
+    }
+  </script>
 </head>
 <body>
   <main id="app" class="container">

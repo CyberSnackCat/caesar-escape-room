@@ -445,8 +445,15 @@ function toggleDyslexia() {
   });
 }
 
-// Wait for DOM to be fully loaded
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize dialogs and event handlers when the DOM is fully loaded
+window.addEventListener('load', () => {
+  // Ensure dialogs are properly initialized
+  [lbDialog, tutorialDialog].forEach(dialog => {
+    if (dialog && !dialog.open) {
+      dialog.style.display = 'none';
+    }
+  });
+
   // Initialize dyslexia mode from storage
   const isDyslexic = localStorage.getItem(DYS_KEY) === '1';
   document.body.classList.toggle('dyslexic', isDyslexic);
@@ -454,23 +461,61 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btn) btn.setAttribute('aria-pressed', isDyslexic ? 'true' : 'false');
   });
 
-  // Setup event listeners
+  // Setup event listeners with explicit dialog handling
   btnStart?.addEventListener('click', startGame);
-  btnLeaderboardIntro?.addEventListener('click', () => { renderLB(); lbDialog?.showModal(); });
-  btnLeaderboardGame?.addEventListener('click', () => { renderLB(); lbDialog?.showModal(); });
-  lbClose?.addEventListener('click', () => lbDialog?.close());
+  
+  const showLeaderboard = () => {
+    if (lbDialog) {
+      renderLB();
+      lbDialog.style.display = 'block';
+      lbDialog.setAttribute('open', '');
+    }
+  };
+  
+  const closeLeaderboard = () => {
+    if (lbDialog) {
+      lbDialog.style.display = 'none';
+      lbDialog.removeAttribute('open');
+    }
+  };
+
+  btnLeaderboardIntro?.addEventListener('click', showLeaderboard);
+  btnLeaderboardGame?.addEventListener('click', showLeaderboard);
+  lbClose?.addEventListener('click', closeLeaderboard);
   lbClear?.addEventListener('click', () => {
     localStorage.removeItem(LB_KEY);
     renderLB();
   });
 
-  btnTutorialIntro?.addEventListener('click', () => tutorialDialog?.showModal());
-  btnTutorialGame?.addEventListener('click', () => tutorialDialog?.showModal());
-  btnTutorialWin?.addEventListener('click', () => tutorialDialog?.showModal());
-  tutorialClose?.addEventListener('click', () => tutorialDialog?.close());
+  const showTutorial = () => {
+    if (tutorialDialog) {
+      tutorialDialog.style.display = 'block';
+      tutorialDialog.setAttribute('open', '');
+    }
+  };
+
+  const closeTutorial = () => {
+    if (tutorialDialog) {
+      tutorialDialog.style.display = 'none';
+      tutorialDialog.removeAttribute('open');
+    }
+  };
+
+  btnTutorialIntro?.addEventListener('click', showTutorial);
+  btnTutorialGame?.addEventListener('click', showTutorial);
+  btnTutorialWin?.addEventListener('click', showTutorial);
+  tutorialClose?.addEventListener('click', closeTutorial);
 
   btnDyslexiaIntro?.addEventListener('click', toggleDyslexia);
   btnDyslexiaGame?.addEventListener('click', toggleDyslexia);
+  
+  // Ensure dialogs can be closed with Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (lbDialog?.hasAttribute('open')) closeLeaderboard();
+      if (tutorialDialog?.hasAttribute('open')) closeTutorial();
+    }
+  });
 });
 
 btnCheck?.addEventListener('click', ()=>{
