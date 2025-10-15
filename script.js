@@ -269,6 +269,13 @@ for (const p of PUZZLES) {
 const TOTAL_TIME = 300;
 const state = { idx: 0, score: 0, hintsLeft: 3, timeLeft: TOTAL_TIME, timerId: null, musicOn: false };
 
+// Initialize dyslexic mode if it was previously enabled
+if (localStorage.getItem('dyslexicMode') === 'true') {
+  document.body.classList.add('dyslexic');
+  btnDyslexiaIntro?.setAttribute('aria-pressed', 'true');
+  btnDyslexiaGame?.setAttribute('aria-pressed', 'true');
+}
+
 // --- DOM ---
 const screenIntro = document.getElementById('screen-intro');
 const screenGame  = document.getElementById('screen-game');
@@ -426,10 +433,29 @@ function makeInput(id, placeholder){
 
 function award(base){ const timeFactor = Math.floor((TOTAL_TIME - state.timeLeft)/10); const points = Math.max(1, base - timeFactor); state.score += points; updateHud(); return points; }
 
+function renderLB() {
+  const scores = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+  lbList.innerHTML = '';
+  scores.sort((a, b) => b.score - a.score).forEach(entry => {
+    const li = document.createElement('li');
+    li.textContent = `${entry.name}: ${entry.score} points (${entry.time}s)`;
+    lbList.appendChild(li);
+  });
+}
+
+function toggleDyslexia() {
+  const body = document.body;
+  const isDyslexic = body.classList.toggle('dyslexic');
+  btnDyslexiaIntro.setAttribute('aria-pressed', isDyslexic);
+  btnDyslexiaGame.setAttribute('aria-pressed', isDyslexic);
+  localStorage.setItem('dyslexicMode', isDyslexic);
+}
+
 // --- Events ---
 btnStart?.addEventListener('click', startGame);
 btnLeaderboardIntro?.addEventListener('click', ()=>{ renderLB(); lbDialog.showModal(); });
 btnLeaderboardGame?.addEventListener('click', ()=>{ renderLB(); lbDialog.showModal(); });
+lbClose?.addEventListener('click', ()=> lbDialog.close());
 
 btnTutorialIntro?.addEventListener('click', ()=> tutorialDialog.showModal());
 btnTutorialGame?.addEventListener('click', ()=> tutorialDialog.showModal());

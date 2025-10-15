@@ -20,6 +20,13 @@ body {
   line-height: 1.5;
 }
 
+body.dyslexic {
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  line-height: 1.6;
+  word-spacing: 0.25em;
+  letter-spacing: 0.05em;
+}
+
 .container {
   max-width: 900px;
   margin: 2rem auto;
