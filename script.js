@@ -322,6 +322,7 @@ const modalClose = document.getElementById('modal-close');
 
 // Modal helpers
 function showModal(html) {
+  console.log('showModal called');
   modalContent.innerHTML = html;
   modal.style.display = 'flex';
   setTimeout(() => { modal.focus && modal.focus(); }, 10);
@@ -576,6 +577,7 @@ window.addEventListener('load', () => {
   };
 
   btnLeaderboardIntro?.addEventListener('click', () => {
+    console.log('Leaderboard button clicked');
     if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = 'Opening…';
     renderLB();
     setTimeout(()=>{ if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = '🏆 Leaderboard'; }, 1200);
