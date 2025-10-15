@@ -418,9 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   if (btnLeaderboardGame) btnLeaderboardGame.addEventListener('click', renderLB);
-  if (btnTutorialIntro) btnTutorialIntro.addEventListener('click', renderTutorial);
-  if (btnTutorialGame) btnTutorialGame.addEventListener('click', renderTutorial);
-  if (btnTutorialWin) btnTutorialWin.addEventListener('click', renderTutorial);
+  // Tutorial dialog wiring handled by the new installer script
 
   // Attach basic modal listeners
   if (modalClose) modalClose.addEventListener('click', closeModal);
@@ -590,28 +588,6 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && modal && modal.style && modal.style.display === 'flex') closeModal();
 });
 
-// Ensure renderTutorial is available globally
-function renderTutorial() {
-  const html = `
-    <h3>📘 Tutorial: Caesar & Vigenère</h3>
-    <section>
-      <h4>Caesar (single shift)</h4>
-      <p><strong>Idea:</strong> Every letter shifts by the same amount (e.g., shift 3).</p>
-      <p><strong>Example:</strong> Shift 3 → A→D, B→E, C→F …; <code>BRING HOT SOUP FOR LUNCH</code> → shift 3 → ciphertext.</p>
-      <p>Try the <em>Brute Force</em> tool to see all 26 shifts and look for real words.</p>
-    </section>
-    <section>
-      <h4>Vigenère (keyword-based)</h4>
-      <p><strong>Idea:</strong> Use a <em>keyword</em>. Each keyword letter selects a Caesar shift, repeating across the message.</p>
-      <p><strong>Keyword → shifts:</strong> LYRICS → L(11), Y(24), R(17), I(8), C(2), S(18)</p>
-      <p><strong>Decrypting:</strong> For each message letter, subtract the keyword’s shift (wrapping the keyword).</p>
-      <p><strong>Example:</strong> Keyword <code>TABBY</code> on ciphertext of
-        <code>HIDE THE TREATS UNDER BED</code> will reveal the plaintext once the correct keyword is entered.</p>
-      <p>Use the <em>Vigenère Helper</em>: enter a keyword → <em>Preview Decrypt</em> of the current puzzle.</p>
-    </section>
-  `;
-  showModal(html);
-}
 
 // --- WebAudio (music mode) ---
 let audioCtx = null, masterGain = null, beatTimer = null, isAudioReady = false;
