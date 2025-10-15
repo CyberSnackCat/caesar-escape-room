@@ -314,13 +314,26 @@ const vigOut  = document.getElementById('vig-output');
 const vigPreviewBtn = document.getElementById('vig-preview');
 const vigClearBtn   = document.getElementById('vig-clear');
 
-const lbDialog  = document.getElementById('leaderboard-dialog');
-const lbList    = document.getElementById('leaderboard-list');
-const lbClose   = document.getElementById('leaderboard-close');
-const lbClear   = document.getElementById('btn-clear-lb');
 
-const tutorialDialog = document.getElementById('tutorial-dialog');
-const tutorialClose  = document.getElementById('tutorial-close');
+// Universal modal elements
+const modal = document.getElementById('universal-modal');
+const modalContent = document.getElementById('modal-content');
+const modalClose = document.getElementById('modal-close');
+
+// Modal helpers
+function showModal(html) {
+  modalContent.innerHTML = html;
+  modal.style.display = 'flex';
+  setTimeout(() => { modal.focus && modal.focus(); }, 10);
+}
+function closeModal() {
+  modal.style.display = 'none';
+  modalContent.innerHTML = '';
+}
+modalClose?.addEventListener('click', closeModal);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && modal.style.display === 'flex') closeModal();
+});
 
 const finalScore = document.getElementById('final-score');
 const finalTime  = document.getElementById('final-time');
@@ -428,11 +441,23 @@ function award(base){ const timeFactor = Math.floor((TOTAL_TIME - state.timeLeft
 
 function renderLB() {
   const scores = JSON.parse(localStorage.getItem(LB_KEY) || '[]');
-  lbList.innerHTML = '';
-  scores.sort((a, b) => b.score - a.score).forEach(entry => {
-    const li = document.createElement('li');
-    li.textContent = `${entry.name}: ${entry.score} points (${entry.time}s)`;
-    lbList.appendChild(li);
+  let html = '<h3>🏆 Leaderboard</h3>';
+  if (scores.length === 0) {
+    html += '<p>No scores yet. Be the first!</p>';
+  } else {
+    html += '<ol class="leaderboard">' + scores
+      .sort((a, b) => b.score - a.score)
+      .map(entry => `<li>${entry.name}: ${entry.score} points (${entry.time}s)</li>`)
+      .join('') + '</ol>';
+  }
+  html += '<div class="leaderboard-actions">'
+    + '<button id="btn-clear-lb" class="btn small">Clear (this device)</button>'
+    + '</div>';
+  showModal(html);
+  // Attach clear handler
+  document.getElementById('btn-clear-lb')?.addEventListener('click', () => {
+    localStorage.removeItem(LB_KEY);
+    renderLB();
   });
 }
 
@@ -550,30 +575,43 @@ window.addEventListener('load', () => {
     }
   };
 
-  btnLeaderboardIntro?.addEventListener('click', showLeaderboard);
-  btnLeaderboardGame?.addEventListener('click', showLeaderboard);
+  btnLeaderboardIntro?.addEventListener('click', () => {
+    if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = 'Opening…';
+    renderLB();
+    setTimeout(()=>{ if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = '🏆 Leaderboard'; }, 1200);
+  });
+  btnLeaderboardGame?.addEventListener('click', renderLB);
   lbClose?.addEventListener('click', closeLeaderboard);
   lbClear?.addEventListener('click', () => {
     localStorage.removeItem(LB_KEY);
     renderLB();
   });
 
-  const showTutorial = () => {
-    if (tutorialDialog) {
-      safeShowModal(tutorialDialog);
-    }
-  };
 
-  const closeTutorial = () => {
-    if (tutorialDialog) {
-      safeClose(tutorialDialog);
-    }
-  };
-
-  btnTutorialIntro?.addEventListener('click', showTutorial);
-  btnTutorialGame?.addEventListener('click', showTutorial);
-  btnTutorialWin?.addEventListener('click', showTutorial);
-  tutorialClose?.addEventListener('click', closeTutorial);
+  function renderTutorial() {
+    const html = `
+      <h3>📘 Tutorial: Caesar & Vigenère</h3>
+      <section>
+        <h4>Caesar (single shift)</h4>
+        <p><strong>Idea:</strong> Every letter shifts by the same amount (e.g., shift 3).</p>
+        <p><strong>Example:</strong> Shift 3 → A→D, B→E, C→F …; <code>BRING HOT SOUP FOR LUNCH</code> → shift 3 → ciphertext.</p>
+        <p>Try the <em>Brute Force</em> tool to see all 26 shifts and look for real words.</p>
+      </section>
+      <section>
+        <h4>Vigenère (keyword-based)</h4>
+        <p><strong>Idea:</strong> Use a <em>keyword</em>. Each keyword letter selects a Caesar shift, repeating across the message.</p>
+        <p><strong>Keyword → shifts:</strong> LYRICS → L(11), Y(24), R(17), I(8), C(2), S(18)</p>
+        <p><strong>Decrypting:</strong> For each message letter, subtract the keyword’s shift (wrapping the keyword).</p>
+        <p><strong>Example:</strong> Keyword <code>TABBY</code> on ciphertext of
+          <code>HIDE THE TREATS UNDER BED</code> will reveal the plaintext once the correct keyword is entered.</p>
+        <p>Use the <em>Vigenère Helper</em>: enter a keyword → <em>Preview Decrypt</em> of the current puzzle.</p>
+      </section>
+    `;
+    showModal(html);
+  }
+  btnTutorialIntro?.addEventListener('click', renderTutorial);
+  btnTutorialGame?.addEventListener('click', renderTutorial);
+  btnTutorialWin?.addEventListener('click', renderTutorial);
 
   btnDyslexiaIntro?.addEventListener('click', toggleDyslexia);
   btnDyslexiaGame?.addEventListener('click', toggleDyslexia);
