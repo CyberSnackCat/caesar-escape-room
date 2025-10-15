@@ -580,91 +580,7 @@ function safeClose(dialogEl) {
   dialogEl.style.display = 'none';
 }
 
-// Initialize dialogs and event handlers when the DOM is fully loaded
-window.addEventListener('load', () => {
-  // Ensure dialogs are properly initialized
-  [lbDialog, tutorialDialog].forEach(dialog => {
-    if (dialog && !dialog.open) {
-      dialog.style.display = 'none';
-    }
-  });
-
-  // Initialize dyslexia mode from storage
-  const isDyslexic = localStorage.getItem(DYS_KEY) === '1';
-  document.body.classList.toggle('dyslexic', isDyslexic);
-  [btnDyslexiaIntro, btnDyslexiaGame].forEach(btn => {
-    if (btn) btn.setAttribute('aria-pressed', isDyslexic ? 'true' : 'false');
-  });
-
-  // Setup event listeners with explicit dialog handling
-  btnStart?.addEventListener('click', startGame);
-  
-  const showLeaderboard = () => {
-      if (lbDialog) {
-      console.log('showLeaderboard called');
-      if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = 'Opening…';
-      renderLB();
-      safeShowModal(lbDialog);
-      setTimeout(()=>{ if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = '🏆 Leaderboard'; }, 1200);
-      }
-  };
-  
-  const closeLeaderboard = () => {
-    if (lbDialog) {
-      safeClose(lbDialog);
-    }
-  };
-
-  btnLeaderboardIntro?.addEventListener('click', () => {
-    console.log('Leaderboard button clicked');
-    if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = 'Opening…';
-    renderLB();
-    setTimeout(()=>{ if (btnLeaderboardIntro) btnLeaderboardIntro.textContent = '🏆 Leaderboard'; }, 1200);
-  });
-  btnLeaderboardGame?.addEventListener('click', renderLB);
-  lbClose?.addEventListener('click', closeLeaderboard);
-  lbClear?.addEventListener('click', () => {
-    localStorage.removeItem(LB_KEY);
-    renderLB();
-  });
-
-
-  function renderTutorial() {
-    const html = `
-      <h3>📘 Tutorial: Caesar & Vigenère</h3>
-      <section>
-        <h4>Caesar (single shift)</h4>
-        <p><strong>Idea:</strong> Every letter shifts by the same amount (e.g., shift 3).</p>
-        <p><strong>Example:</strong> Shift 3 → A→D, B→E, C→F …; <code>BRING HOT SOUP FOR LUNCH</code> → shift 3 → ciphertext.</p>
-        <p>Try the <em>Brute Force</em> tool to see all 26 shifts and look for real words.</p>
-      </section>
-      <section>
-        <h4>Vigenère (keyword-based)</h4>
-        <p><strong>Idea:</strong> Use a <em>keyword</em>. Each keyword letter selects a Caesar shift, repeating across the message.</p>
-        <p><strong>Keyword → shifts:</strong> LYRICS → L(11), Y(24), R(17), I(8), C(2), S(18)</p>
-        <p><strong>Decrypting:</strong> For each message letter, subtract the keyword’s shift (wrapping the keyword).</p>
-        <p><strong>Example:</strong> Keyword <code>TABBY</code> on ciphertext of
-          <code>HIDE THE TREATS UNDER BED</code> will reveal the plaintext once the correct keyword is entered.</p>
-        <p>Use the <em>Vigenère Helper</em>: enter a keyword → <em>Preview Decrypt</em> of the current puzzle.</p>
-      </section>
-    `;
-    showModal(html);
-  }
-  btnTutorialIntro?.addEventListener('click', renderTutorial);
-  btnTutorialGame?.addEventListener('click', renderTutorial);
-  btnTutorialWin?.addEventListener('click', renderTutorial);
-
-  btnDyslexiaIntro?.addEventListener('click', toggleDyslexia);
-  btnDyslexiaGame?.addEventListener('click', toggleDyslexia);
-  
-  // Ensure dialogs can be closed with Escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      if (lbDialog?.hasAttribute('open')) closeLeaderboard();
-      if (tutorialDialog?.hasAttribute('open')) closeTutorial();
-    }
-  });
-});
+// Legacy dialog logic removed — using universal modal and delegated handlers instead
 
 btnCheck?.addEventListener('click', ()=>{
   const p = PUZZLES[state.idx]; let ok = false;
@@ -786,12 +702,11 @@ btnSaveScore?.addEventListener('click', ()=>{
   const time=Number(finalTime?.textContent)||0;
   addLBEntry(name, score, time);
   if (playerName) playerName.value='';
-  renderLB(name); safeShowModal(lbDialog);
+  renderLB(name);
 });
-btnViewLB?.addEventListener('click', ()=>{ renderLB(); safeShowModal(lbDialog); });
+btnViewLB?.addEventListener('click', ()=>{ renderLB(); });
 btnReplay?.addEventListener('click', ()=>{ showScreen(screenIntro); });
 
-lbClose?.addEventListener('click', ()=> safeClose(lbDialog));
 lbClear?.addEventListener('click', ()=>{ localStorage.removeItem(LB_KEY); renderLB(); });
 
 // Keyboard helpers
