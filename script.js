@@ -9,7 +9,7 @@ console.log('script.js loaded — build: 2025-10-15T00:00:00Z');
 // --- Utilities: Caesar ---
 function normalizeCharCode(c) {
   const code = c.charCodeAt(0);
-  if (code >= 65 && code <= 90) return { base: 65, code, isLetter: true, isUpper: true };
+document.addEventListener('DOMContentLoaded', () => {
   if (code >= 97 && code <= 122) return { base: 97, code, isLetter: true, isUpper: false };
   return { base: null, code, isLetter: false, isUpper: false };
 }
@@ -51,6 +51,19 @@ function vigenereEncrypt(plaintext, key) {
 }
 function vigenereDecrypt(ciphertext, key) {
   const K = onlyLetters(key);
+  // --- Game logic functions (must be defined after DOM is ready) ---
+  function updateHud(){
+    hudScore.textContent = state.score;
+    hudHints.textContent = state.hintsLeft;
+    hudTime.textContent = state.timeLeft;
+    hudPIndex.textContent = state.idx + 1;
+  }
+  function resetGame(){
+    state.idx=0; state.score=0; state.hintsLeft=3; state.timeLeft=TOTAL_TIME; updateHud(); stopMusic();
+  }
+  function startGame(){
+    resetGame(); showScreen(screenGame); hudPTotal.textContent = PUZZLES.length; loadPuzzle(state.idx); startGlobalTimer();
+  }
   if (!K) return ciphertext;
   let ki = 0;
   return [...ciphertext].map(ch => {
