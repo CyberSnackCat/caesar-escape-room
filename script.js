@@ -1,3 +1,45 @@
+// --- Tutorial Dialog Installer (new) ---
+document.addEventListener('DOMContentLoaded', function() {
+  const tutorialDialog = document.getElementById('tutorial-dialog');
+  const tutorialClose = document.getElementById('tutorial-close');
+  const btnTutorialIntro = document.getElementById('btn-tutorial-intro');
+  const btnTutorialGame = document.getElementById('btn-tutorial');
+  const btnTutorialWin = document.getElementById('btn-tutorial-win');
+
+  function safeShowTutorialDialog() {
+    if (!tutorialDialog) return;
+    if (typeof tutorialDialog.showModal === 'function') {
+      tutorialDialog.showModal();
+    } else {
+      // Polyfill fallback
+      tutorialDialog.setAttribute('open', '');
+      tutorialDialog.style.display = 'block';
+    }
+  }
+
+  function safeCloseTutorialDialog() {
+    if (!tutorialDialog) return;
+    if (typeof tutorialDialog.close === 'function') {
+      tutorialDialog.close();
+    } else {
+      tutorialDialog.removeAttribute('open');
+      tutorialDialog.style.display = 'none';
+    }
+  }
+
+  if (btnTutorialIntro) btnTutorialIntro.addEventListener('click', safeShowTutorialDialog);
+  if (btnTutorialGame) btnTutorialGame.addEventListener('click', safeShowTutorialDialog);
+  if (btnTutorialWin) btnTutorialWin.addEventListener('click', safeShowTutorialDialog);
+  if (tutorialClose) tutorialClose.addEventListener('click', safeCloseTutorialDialog);
+
+  // Optional: close dialog on Escape key
+  if (tutorialDialog) {
+    tutorialDialog.addEventListener('cancel', (e) => {
+      e.preventDefault();
+      safeCloseTutorialDialog();
+    });
+  }
+});
 // ==========================
 // Caesar Cipher Escape Room (with Vigenere bonus levels)
 // With a Cat, Music and Food!
@@ -360,9 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
     hudTime.textContent = state.timeLeft;
     hudPIndex.textContent = state.idx + 1;
   }
-  function resetGame(){
-    state.idx=0; state.score=0; state.hintsLeft=3; state.timeLeft=TOTAL_TIME; updateHud(); stopMusic();
-  }
+    // Tutorial dialog wiring will be handled by the new installer script
   function startGame(){
     resetGame(); showScreen(screenGame); if(hudPTotal) hudPTotal.textContent = PUZZLES.length; loadPuzzle(state.idx); startGlobalTimer();
   }
