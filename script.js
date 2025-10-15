@@ -380,14 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnTutorialWin) btnTutorialWin.addEventListener('click', renderTutorial);
 });
 
-// Global delegated click handler as backup
-document.addEventListener('click', (e) => {
-  const t = e.target;
-  if (t && t.id === 'btn-leaderboard') {
-    console.log('Delegated: Leaderboard button clicked');
-    renderLB();
-  }
-});
+// (delegated click handler removed - handlers attached directly to buttons)
 
 // Modal helpers
 function showModal(html) {
