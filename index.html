@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Caesar Cipher Escape Room — Cat • Music • Food Edition</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <main id="app" class="container">
+    <!-- Intro / Start Screen -->
+    <section id="screen-intro" class="screen active" role="region" aria-labelledby="intro-title">
+      <h1 id="intro-title">Caesar Cipher Escape Room</h1>
+      <p class="lede">
+        🐱🎶🍕 You’re locked in the school after-hours lab.
+        Your cat <strong>Cipher</strong> is prowling, music echoes from the band room, and the cafeteria smells amazing.
+        Decode the Caesar messages to unlock each door—before time runs out.
+      </p>
+      <ul class="rules">
+        <li>Each puzzle is a Caesar cipher (alphabet shifted by a fixed amount).</li>
+        <li>Use hints or built-in tools (Brute Force, Frequency) to learn while you solve.</li>
+        <li>Hints cost points; faster solves earn more points.</li>
+      </ul>
+      <button id="btn-start" class="btn primary">Start</button>
+    </section>
+
+    <!-- Game Screen -->
+    <section id="screen-game" class="screen" role="region" aria-live="polite">
+      <header class="hud">
+        <div>⏱️ Time: <span id="hud-time">300</span>s</div>
+        <div>⭐ Score: <span id="hud-score">0</span></div>
+        <div>💡 Hints Left: <span id="hud-hints">3</span></div>
+        <div>🧩 Puzzle <span id="hud-puzzle-index">1</span>/<span id="hud-puzzle-total">6</span></div>
+        <div class="hud-right">
+          <button id="btn-sound" class="btn small" aria-pressed="false" aria-label="Toggle music mode" disabled>
+            🎵 Music: Off
+          </button>
+        </div>
+      </header>
+
+      <article class="puzzle-card">
+        <h2 id="puzzle-title">Puzzle</h2>
+        <p id="puzzle-story" class="story"></p>
+        <div class="cipher-block">
+          <label for="ciphertext" class="label">Ciphertext</label>
+          <textarea id="ciphertext" readonly aria-readonly="true"></textarea>
+        </div>
+
+        <div id="prompt-area"></div>
+
+        <div class="actions">
+          <button id="btn-check" class="btn">Check</button>
+          <button id="btn-hint" class="btn">Use Hint (−10)</button>
+          <button id="btn-tools" class="btn">Tools</button>
+        </div>
+
+        <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+      </article>
+
+      <!-- Tools Modal -->
+      <dialog id="tools-dialog" aria-label="Cryptography Tools">
+        <h3>Cryptography Tools</h3>
+        <div class="tools-grid">
+          <section>
+            <h4>Brute Force Explorer</h4>
+            <label for="bf-shift">Shift (0–25)</label>
+            <input type="number" id="bf-shift" min="0" max="25" value="0"/>
+            <button id="bf-apply" class="btn small">Apply</button>
+            <pre id="bf-output" class="mono"></pre>
+            <button id="bf-all" class="btn small">Show All Shifts</button>
+            <pre id="bf-all-output" class="mono small"></pre>
+          </section>
+          <section>
+            <h4>Letter Frequency</h4>
+            <button id="freq-calc" class="btn small">Calculate</button>
+            <pre id="freq-output" class="mono small"></pre>
+            <p class="hint-note">Tip: In English, E, T, A, O, I, N are common.</p>
+          </section>
+        </div>
+        <button id="tools-close" class="btn">Close</button>
+      </dialog>
+    </section>
+
+    <!-- Win / Summary Screen -->
+    <section id="screen-win" class="screen" role="region" aria-labelledby="win-title">
+      <h2 id="win-title">You Escaped! 🗝️</h2>
+      <p>Final Score: <strong id="final-score"></strong></p>
+      <p>Total Time: <strong id="final-time"></strong>s</p>
+      <button id="btn-replay" class="btn primary">Play Again</button>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Cat • Music • Food Edition • Caesar cipher only (MVP)</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
