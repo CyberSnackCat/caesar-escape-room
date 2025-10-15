@@ -4,7 +4,7 @@
 // ==========================
 
 // Build marker: update this value when pushing changes to help detect cached scripts in users' browsers
-console.log('script.js loaded — build: 2025-10-15T00:00:00Z');
+console.log('script.js loaded — build: 2025-10-15T14:30:00Z — DEBUG VERSION');
 
 // --- Utilities: Caesar ---
 function normalizeCharCode(c) {
