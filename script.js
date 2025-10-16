@@ -45,8 +45,8 @@ document.addEventListener('DOMContentLoaded', function() {
 // With a Cat, Music and Food!
 // ==========================
 
-// Build marker: make sure to update this value when pushing changes to help detect cached scripts in users' browsers
-console.log('script.js loaded — build: 2025-10-15T16:10:00Z — ALL LISTENERS IN DOMContentLoaded');
+// Build marker: update this to force cache-busting
+console.log('script.js loaded — build: 2025-10-15T16:30:00Z — Tutorial Dialog Fixed');
 
 // --- Utilities: Caesar ---
 function normalizeCharCode(c) {
@@ -93,19 +93,6 @@ function vigenereEncrypt(plaintext, key) {
 }
 function vigenereDecrypt(ciphertext, key) {
   const K = onlyLetters(key);
-  // --- Game logic functions (must be defined after DOM is ready) ---
-  function updateHud(){
-    hudScore.textContent = state.score;
-    hudHints.textContent = state.hintsLeft;
-    hudTime.textContent = state.timeLeft;
-    hudPIndex.textContent = state.idx + 1;
-  }
-  function resetGame(){
-    state.idx=0; state.score=0; state.hintsLeft=3; state.timeLeft=TOTAL_TIME; updateHud(); stopMusic();
-  }
-  function startGame(){
-    resetGame(); showScreen(screenGame); hudPTotal.textContent = PUZZLES.length; loadPuzzle(state.idx); startGlobalTimer();
-  }
   if (!K) return ciphertext;
   let ki = 0;
   return [...ciphertext].map(ch => {
