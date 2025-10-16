@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ==========================
 
 // Build marker: update this to force cache-busting
-console.log('script.js loaded — build: 2025-10-15T16:35:00Z — Tutorial Dialog Debug');
+console.log('script.js loaded — build: 2025-10-15T16:40:00Z — HTML Cache Bust');
 
 // --- Utilities: Caesar ---
 function normalizeCharCode(c) {
