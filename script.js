@@ -7,10 +7,16 @@ document.addEventListener('DOMContentLoaded', function() {
   const btnTutorialWin = document.getElementById('btn-tutorial-win');
 
   function safeShowTutorialDialog() {
-    if (!tutorialDialog) return;
+    console.log('safeShowTutorialDialog called, tutorialDialog:', tutorialDialog);
+    if (!tutorialDialog) {
+      console.error('Tutorial dialog element not found!');
+      return;
+    }
     if (typeof tutorialDialog.showModal === 'function') {
+      console.log('Using native showModal');
       tutorialDialog.showModal();
     } else {
+      console.log('Using polyfill fallback');
       // Polyfill fallback
       tutorialDialog.setAttribute('open', '');
       tutorialDialog.style.display = 'block';
@@ -46,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ==========================
 
 // Build marker: update this to force cache-busting
-console.log('script.js loaded — build: 2025-10-15T16:30:00Z — Tutorial Dialog Fixed');
+console.log('script.js loaded — build: 2025-10-15T16:35:00Z — Tutorial Dialog Debug');
 
 // --- Utilities: Caesar ---
 function normalizeCharCode(c) {
