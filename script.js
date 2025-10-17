@@ -717,6 +717,9 @@ function loadPuzzle(i){
   // Music availability
   if (p.music) { btnSound.disabled = false; btnSound.textContent = state.musicOn ? '🎵 Music: On' : '🎵 Music: Off'; }
   else { btnSound.disabled = true; stopMusic(); }
+
+  // Regenerate particles for each puzzle/theme
+  createCipherParticles();
 }
 
 function makeLabel(text, forId){

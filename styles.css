@@ -62,7 +62,7 @@ body.theme-cat::before {
   content: '🐱';
   position: fixed;
   font-size: 15rem;
-  opacity: 0.03;
+  opacity: 0.08;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(-15deg);
@@ -83,7 +83,7 @@ body.theme-music::before {
   content: '🎵';
   position: fixed;
   font-size: 15rem;
-  opacity: 0.03;
+  opacity: 0.08;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(10deg);
@@ -104,7 +104,7 @@ body.theme-food::before {
   content: '🍕';
   position: fixed;
   font-size: 15rem;
-  opacity: 0.03;
+  opacity: 0.08;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(-10deg);
