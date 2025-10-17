@@ -61,11 +61,11 @@ body.theme-cat {
 body.theme-cat::before {
   content: '🐱';
   position: fixed;
-  font-size: 10rem;
-  opacity: 0.10;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%) rotate(-10deg);
+  font-size: 9rem;
+  opacity: 0.13;
+  bottom: 2.5rem;
+  left: 2.5rem;
+  transform: rotate(-10deg);
   z-index: 2;
   pointer-events: none;
   animation: floatIcon 20s ease-in-out infinite;
@@ -82,11 +82,11 @@ body.theme-music {
 body.theme-music::before {
   content: '🎵';
   position: fixed;
-  font-size: 10rem;
-  opacity: 0.10;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%) rotate(10deg);
+  font-size: 9rem;
+  opacity: 0.13;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  transform: rotate(10deg);
   z-index: 2;
   pointer-events: none;
   animation: floatIcon 18s ease-in-out infinite;
@@ -103,11 +103,11 @@ body.theme-food {
 body.theme-food::before {
   content: '🍕';
   position: fixed;
-  font-size: 10rem;
-  opacity: 0.10;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%) rotate(-10deg);
+  font-size: 9rem;
+  opacity: 0.13;
+  bottom: 2.5rem;
+  left: 2.5rem;
+  transform: rotate(-10deg);
   z-index: 2;
   pointer-events: none;
   animation: floatIcon 16s ease-in-out infinite;
