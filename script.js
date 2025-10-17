@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ==========================
 
 // Build marker: update this to force cache-busting
-console.log('script.js loaded — build: 2025-10-15T17:00:00Z — Visual Enhancements Added');
+console.log('script.js loaded — build: 2025-10-16T10:30:00Z — Visual Enhancements Fixed');
 
 // --- Particle System ---
 function createCipherParticles() {
@@ -62,9 +62,9 @@ function createCipherParticles() {
   // Clear existing particles
   container.innerHTML = '';
   
-  // Create 20 floating particles
+  // Create 15 floating particles (reduced for better visual)
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const numParticles = 20;
+  const numParticles = 15;
   
   for (let i = 0; i < numParticles; i++) {
     const particle = document.createElement('div');
@@ -72,21 +72,22 @@ function createCipherParticles() {
     particle.textContent = letters[Math.floor(Math.random() * letters.length)];
     
     // Random horizontal position
-    particle.style.left = Math.random() * 100 + '%';
+    particle.style.left = (Math.random() * 90 + 5) + '%';
     
-    // Random animation duration (15-30 seconds)
-    const duration = 15 + Math.random() * 15;
+    // Random animation duration (20-40 seconds for slower drift)
+    const duration = 20 + Math.random() * 20;
     particle.style.animationDuration = duration + 's';
     
-    // Random delay to stagger animations
-    particle.style.animationDelay = Math.random() * 10 + 's';
+    // Random delay to stagger animations (spread over full duration)
+    particle.style.animationDelay = -(Math.random() * duration) + 's';
     
-    // Random starting position
-    particle.style.top = Math.random() * 100 + '%';
-    
-    // Random size variation
-    const size = 1 + Math.random() * 1;
+    // Random size variation (smaller)
+    const size = 0.8 + Math.random() * 0.6;
     particle.style.fontSize = size + 'rem';
+    
+    // Random horizontal drift
+    const drift = -10 + Math.random() * 20;
+    particle.style.setProperty('--drift', drift + 'px');
     
     container.appendChild(particle);
   }

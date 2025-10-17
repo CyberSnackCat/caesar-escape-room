@@ -52,31 +52,83 @@ body {
 /* Animated gradient backgrounds for different puzzle themes */
 body.theme-cat {
   background: 
-    radial-gradient(circle at 20% 80%, rgba(251, 146, 60, 0.15), transparent 40%),
-    radial-gradient(circle at 80% 20%, rgba(249, 115, 22, 0.12), transparent 50%),
-    linear-gradient(135deg, #0f172a 0%, #1e1b2e 50%, #0f172a 100%);
-  animation: gradientShift 15s ease infinite;
+    radial-gradient(circle at 20% 80%, rgba(251, 146, 60, 0.25), transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(249, 115, 22, 0.2), transparent 60%),
+    linear-gradient(135deg, #1a0f0a 0%, #2d1b10 50%, #1a0f0a 100%);
+  animation: gradientShift 12s ease-in-out infinite;
+}
+
+body.theme-cat::before {
+  content: '🐱';
+  position: fixed;
+  font-size: 15rem;
+  opacity: 0.03;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  z-index: 0;
+  pointer-events: none;
+  animation: floatIcon 20s ease-in-out infinite;
 }
 
 body.theme-music {
   background: 
-    radial-gradient(circle at 30% 70%, rgba(147, 51, 234, 0.15), transparent 45%),
-    radial-gradient(circle at 70% 30%, rgba(59, 130, 246, 0.12), transparent 50%),
-    linear-gradient(135deg, #0f172a 0%, #1a1b3e 50%, #0f172a 100%);
-  animation: gradientShift 18s ease infinite;
+    radial-gradient(circle at 30% 70%, rgba(147, 51, 234, 0.25), transparent 50%),
+    radial-gradient(circle at 70% 30%, rgba(59, 130, 246, 0.2), transparent 60%),
+    linear-gradient(135deg, #0a0f1a 0%, #1a1b3e 50%, #0a0f1a 100%);
+  animation: gradientShift 15s ease-in-out infinite;
+}
+
+body.theme-music::before {
+  content: '🎵';
+  position: fixed;
+  font-size: 15rem;
+  opacity: 0.03;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(10deg);
+  z-index: 0;
+  pointer-events: none;
+  animation: floatIcon 18s ease-in-out infinite;
 }
 
 body.theme-food {
   background: 
-    radial-gradient(circle at 40% 60%, rgba(234, 179, 8, 0.15), transparent 40%),
-    radial-gradient(circle at 60% 40%, rgba(251, 191, 36, 0.12), transparent 50%),
-    linear-gradient(135deg, #0f172a 0%, #2e2410 50%, #0f172a 100%);
-  animation: gradientShift 20s ease infinite;
+    radial-gradient(circle at 40% 60%, rgba(234, 179, 8, 0.25), transparent 50%),
+    radial-gradient(circle at 60% 40%, rgba(251, 191, 36, 0.2), transparent 60%),
+    linear-gradient(135deg, #1a1408 0%, #2e2410 50%, #1a1408 100%);
+  animation: gradientShift 14s ease-in-out infinite;
+}
+
+body.theme-food::before {
+  content: '🍕';
+  position: fixed;
+  font-size: 15rem;
+  opacity: 0.03;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-10deg);
+  z-index: 0;
+  pointer-events: none;
+  animation: floatIcon 16s ease-in-out infinite;
 }
 
 @keyframes gradientShift {
-  0%, 100% { filter: hue-rotate(0deg) brightness(1); }
-  50% { filter: hue-rotate(20deg) brightness(1.1); }
+  0%, 100% { 
+    filter: hue-rotate(0deg) brightness(1); 
+  }
+  50% { 
+    filter: hue-rotate(30deg) brightness(1.15); 
+  }
+}
+
+@keyframes floatIcon {
+  0%, 100% { 
+    transform: translate(-50%, -50%) rotate(-15deg) scale(1);
+  }
+  50% { 
+    transform: translate(-50%, -48%) rotate(15deg) scale(1.05);
+  }
 }
 
 body.dyslexic {
@@ -244,26 +296,28 @@ dialog .btn {
 .cipher-particle {
   position: absolute;
   font-family: var(--mono);
-  font-size: 1.5rem;
-  color: rgba(255, 255, 255, 0.08);
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.06);
   font-weight: 700;
   animation: float linear infinite;
   user-select: none;
+  bottom: -50px;
+  --drift: 0px;
 }
 
 @keyframes float {
   0% {
-    transform: translateY(0) rotate(0deg);
+    transform: translateY(0) translateX(0) rotate(0deg);
     opacity: 0;
   }
-  10% {
-    opacity: 0.15;
+  5% {
+    opacity: 0.1;
   }
-  90% {
-    opacity: 0.15;
+  95% {
+    opacity: 0.1;
   }
   100% {
-    transform: translateY(-100vh) rotate(360deg);
+    transform: translateY(-110vh) translateX(var(--drift)) rotate(180deg);
     opacity: 0;
   }
 }
