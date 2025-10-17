@@ -45,6 +45,38 @@ body {
   color: var(--text);
   font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
   line-height: 1.5;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Animated gradient backgrounds for different puzzle themes */
+body.theme-cat {
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(251, 146, 60, 0.15), transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(249, 115, 22, 0.12), transparent 50%),
+    linear-gradient(135deg, #0f172a 0%, #1e1b2e 50%, #0f172a 100%);
+  animation: gradientShift 15s ease infinite;
+}
+
+body.theme-music {
+  background: 
+    radial-gradient(circle at 30% 70%, rgba(147, 51, 234, 0.15), transparent 45%),
+    radial-gradient(circle at 70% 30%, rgba(59, 130, 246, 0.12), transparent 50%),
+    linear-gradient(135deg, #0f172a 0%, #1a1b3e 50%, #0f172a 100%);
+  animation: gradientShift 18s ease infinite;
+}
+
+body.theme-food {
+  background: 
+    radial-gradient(circle at 40% 60%, rgba(234, 179, 8, 0.15), transparent 40%),
+    radial-gradient(circle at 60% 40%, rgba(251, 191, 36, 0.12), transparent 50%),
+    linear-gradient(135deg, #0f172a 0%, #2e2410 50%, #0f172a 100%);
+  animation: gradientShift 20s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { filter: hue-rotate(0deg) brightness(1); }
+  50% { filter: hue-rotate(20deg) brightness(1.1); }
 }
 
 body.dyslexic {
@@ -60,8 +92,16 @@ body.dyslexic {
   padding: 0 1rem;
 }
 
-.screen { display: none; }
+.screen { 
+  display: none;
+  animation: fadeIn 0.6s ease-out;
+}
 .screen.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 h1, h2, h3, h4 { margin: 0.5rem 0 1rem; }
 .lede { font-size: 1.1rem; color: var(--muted); }
@@ -86,6 +126,18 @@ h1, h2, h3, h4 { margin: 0.5rem 0 1rem; }
   padding: 1rem;
   border-radius: 10px;
   box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+  animation: cardEntry 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes cardEntry {
+  from { 
+    opacity: 0; 
+    transform: scale(0.9) rotateX(10deg);
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1) rotateX(0deg);
+  }
 }
 
 .label { display: block; font-weight: 600; margin-bottom: 0.25rem; }
@@ -176,3 +228,88 @@ dialog .btn {
 
 .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; background: #0b1222; padding: .5rem; border-radius: 6px; border: 1px solid #1f2937; overflow-x: auto; }
 .mono.small { font-size: .9rem; max-height: 200px; }
+
+/* Floating cipher particles background */
+.cipher-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.cipher-particle {
+  position: absolute;
+  font-family: var(--mono);
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.08);
+  font-weight: 700;
+  animation: float linear infinite;
+  user-select: none;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.15;
+  }
+  90% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Ensure main content is above particles */
+.container {
+  position: relative;
+  z-index: 10;
+}
+
+/* Button hover effects */
+.btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn.primary:hover {
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+}
+
+/* Pulse animation for important buttons */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.btn.primary {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Success feedback animation */
+.feedback.ok {
+  animation: successPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes successPop {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+

@@ -52,7 +52,48 @@ document.addEventListener('DOMContentLoaded', function() {
 // ==========================
 
 // Build marker: update this to force cache-busting
-console.log('script.js loaded — build: 2025-10-15T16:45:00Z — Tutorial Content Updated');
+console.log('script.js loaded — build: 2025-10-15T17:00:00Z — Visual Enhancements Added');
+
+// --- Particle System ---
+function createCipherParticles() {
+  const container = document.getElementById('cipher-particles');
+  if (!container) return;
+  
+  // Clear existing particles
+  container.innerHTML = '';
+  
+  // Create 20 floating particles
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const numParticles = 20;
+  
+  for (let i = 0; i < numParticles; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'cipher-particle';
+    particle.textContent = letters[Math.floor(Math.random() * letters.length)];
+    
+    // Random horizontal position
+    particle.style.left = Math.random() * 100 + '%';
+    
+    // Random animation duration (15-30 seconds)
+    const duration = 15 + Math.random() * 15;
+    particle.style.animationDuration = duration + 's';
+    
+    // Random delay to stagger animations
+    particle.style.animationDelay = Math.random() * 10 + 's';
+    
+    // Random starting position
+    particle.style.top = Math.random() * 100 + '%';
+    
+    // Random size variation
+    const size = 1 + Math.random() * 1;
+    particle.style.fontSize = size + 'rem';
+    
+    container.appendChild(particle);
+  }
+}
+
+// Call on load
+document.addEventListener('DOMContentLoaded', createCipherParticles);
 
 // --- Utilities: Caesar ---
 function normalizeCharCode(c) {
@@ -636,6 +677,17 @@ function loadPuzzle(i){
   feedback.textContent = '';
   feedback.className = 'feedback';
   promptArea.innerHTML = '';
+  
+  // Apply themed background based on puzzle theme
+  const title = p.title.toLowerCase();
+  document.body.classList.remove('theme-cat', 'theme-music', 'theme-food');
+  if (title.includes('cat') || title.includes('cipher')) {
+    document.body.classList.add('theme-cat');
+  } else if (title.includes('music') || title.includes('lyric') || title.includes('nerdcore')) {
+    document.body.classList.add('theme-music');
+  } else if (title.includes('food') || title.includes('cake') || title.includes('pizza') || title.includes('kitchen') || title.includes('baguette') || title.includes('cheese') || title.includes('pastry')) {
+    document.body.classList.add('theme-food');
+  }
 
   if (p.type === 'decode') {
     // Caesar plaintext
