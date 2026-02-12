@@ -2,9 +2,9 @@
 
 
 
-**An interactive cryptography game featuring a curious cat, musical puzzles, and tasty food clues**https://cybersnackcat.github.io/caesar-escape-room/
+**An interactive cryptography game with a curious cat, musical puzzles, and tasty food clues**https://cybersnackcat.github.io/caesar-escape-room/
 
-
+i made this because i like puzzles and cryptography based games. i also like coding. i wanted to see if i could incorporate all three.
 
 [![Play Now](https://img.shields.io/badge/Play-Live%20Demo-blue?style=for-the-badge)](https://cybersnackcat.github.io/caesar-escape-room/)A fun **browser game** to teach the classic **Caesar cipher** through an escape-room  featuring a curious fluffy tabby cat, music based puzzles, and tasty food clues.  
 
