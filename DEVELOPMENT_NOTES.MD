@@ -1,0 +1,8 @@
+# Development Notes
+
+- i made this puzzle game because I love cryptography and puzzles like escape rooms. I wanted something that combined classical ciphers with stuff I actually like (cats, food, and music) so I just mashed everything together and somehow it worked.
+- The Caesar and Vigenère parts were the easiest because I already knew how those ciphers worked from reading lots of books about them. The hard part was figuring out how to make the puzzles feel like an actual “escape room” instead of just a worksheet.
+- I spent a lot of time trying to make the clues feel like they came from a real person. That’s why there are random references to cats and ramen and nerdcore songs. It’s basically just my brain on paper.
+- I didn’t use anything fancy to build this. It was mostly me writing the puzzles, testing them on myself, breaking them, fixing them, and then rewriting the clues so they made more sense. I had to look up a lot of stuff online about how people design puzzle flow because my first version was way too confusing.
+- I tried to make it look more interesting by using the agent in VS Studio to add some color and images. But honestly it doesn't look great. If i want to make things that other people will use they should probably look better.
+- If I had more time, I’d add more levels and maybe a hint system so people don’t get stuck forever. Right now it’s pretty simple, but it’s fun and it shows the stuff I like working on. to be honest, if i have more time, i want to build something different like a substitution cipher game.
