@@ -6,11 +6,11 @@
 
 
 
-[![Play Now](https://img.shields.io/badge/Play-Live%20Demo-blue?style=for-the-badge)](https://cybersnackcat.github.io/caesar-escape-room/)A fun **browser game** to teach the classic **Caesar cipher** through an escape-room narrative featuring a curious cat, musical puzzles, and tasty food clues.  
+[![Play Now](https://img.shields.io/badge/Play-Live%20Demo-blue?style=for-the-badge)](https://cybersnackcat.github.io/caesar-escape-room/)A fun **browser game** to teach the classic **Caesar cipher** through an escape-room  featuring a curious fluffy tabby cat, music based puzzles, and tasty food clues.  
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 
-The Caesar cipher is a classic way to code information in plaintext. Each letter is replaced by a letter that is a fixed number of positions elsewhere in the alphabet. The method is named after Julius Caesar, who used it in his private correspondence.
+The Caesar cipher is a classic way to code information in plaintext. Each letter is replaced by a letter that is a fixed number of positions to the right or the left in the alphabet. The method is named after Julius Caesar, who used it in his private correspondence. an example of a Caesar cipher is A becoming D with every letter moving over three to the right.
 
 ---
 
@@ -20,11 +20,11 @@ For bonus levels, try the Vigenere cipher! The game now has a total of 12 levels
 
 No installs or external files required — **pure HTML/CSS/JS**. Runs offline.
 
-An educational browser-based escape room game that teaches classical cryptography through hands-on puzzle-solving. Players learn the **Caesar cipher** and **Vigenère cipher** while navigating a narrative featuring a curious cat, musical challenges, and food-themed clues.
+An educational browser-based escape room game with classical cryptography and handson puzzle solving. Players learn the **Caesar cipher** and **Vigenère cipher** with a curious cat, musical challenges, and food-themed clues.
 
 ## 🎯 Features
 
-The Caesar cipher, named after Julius Caesar who used it for private correspondence, is a substitution cipher where each letter is replaced by another letter a fixed number of positions away in the alphabet. This game extends the learning experience with Vigenère cipher bonus levels, offering **12 progressively challenging puzzles**.- **6 themed puzzles** (cat 🐱, music 🎶, food 🍕) that escalate in difficulty:
+The Caesar cipher is named after Julius Caesar who used it for private correspondence. It is a substitution cipher where each letter is replaced by another letter a fixed number of positions away in the alphabet. This game also includes Vigenère cipher bonus levels, offering **12 incresingly challenging puzzles**.- **6 themed puzzles** (cat 🐱, music 🎶, food 🍕):
 
   - Decode plaintext, identify Caesar **shift**, extract a **clue word**
 
